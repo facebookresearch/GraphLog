@@ -1,0 +1,31 @@
+import setuptools
+
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
+with open("requirements.txt") as f:
+    requirements = f.read().splitlines()
+
+setuptools.setup(
+    name="graphlog",
+    version="0.0.1",
+    author="Koustuv Sinha and Shagun Sodhani",
+    author_email="koustuv.sinha@mail.mcgill.ca and sshagunsodhani@gmail.com",
+    description="API to interface with the GraphLog Dataset",
+    long_description=open("README.md").read(),
+    long_description_content_type="text/markdown",
+    install_requires=[],
+    url="",
+    packages=["graphlog"],
+    classifiers=[
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
+    python_requires=">=3.6",
+    # Install development dependencies with
+    # pip install -e .[dev]
+    extras_require={"dev": requirements},
+)
