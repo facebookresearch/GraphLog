@@ -35,7 +35,7 @@ def download_and_extract_archive(
 ) -> None:
 
     archive_filename = "data.zip"
-    data_filename = "data.jsonl"
+    data_filename = filename
     download_url(url=url, download_dir=download_dir, filename=archive_filename, md5=md5)
 
     archive_path = os.path.join(download_dir, archive_filename)
