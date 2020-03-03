@@ -3,8 +3,11 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-with open("requirements.txt") as f:
-    requirements = f.read().splitlines()
+with open("requirements/base.txt") as f:
+    base_requirements = f.read().splitlines()
+
+with open("requirements/dev.txt") as f:
+    dev_requirements = f.read().splitlines()
 
 setuptools.setup(
     name="graphlog",
@@ -14,7 +17,7 @@ setuptools.setup(
     description="API to interface with the GraphLog Dataset",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    install_requires=[],
+    install_requires=base_requirements,
     url="",
     packages=["graphlog"],
     classifiers=[
@@ -27,5 +30,5 @@ setuptools.setup(
     python_requires=">=3.6",
     # Install development dependencies with
     # pip install -e .[dev]
-    extras_require={"dev": requirements},
+    extras_require={"dev": dev_requirements + base_requirements},
 )

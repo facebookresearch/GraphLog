@@ -2,12 +2,20 @@
 # GraphLog
 API to interface with the GraphLog Dataset
 
-### Setup
+### Installation
 
+* `git clone git@github.com:fairinternal/GraphLog`
+* `cd GraphLog`
 * `pip install .`
 
-### Documentation
+Alternatively, `pip install git+ssh://git@github.com/fairinternal/GraphLog.git@master#egg=graphlog`
 
+### Use
+
+
+
+
+### Documentation
 
 
 ### Dev Setup
@@ -18,8 +26,5 @@ API to interface with the GraphLog Dataset
     * `black`
     * `flake8`
     * `mypy`
+* CI currently only checks for linting. 
 * Lint tests can be run locally using `nox -s lint`
-
-### Acknowledgements
-
-* Config for `circleci`, `pre-commit`, `mypy` etc are borrowed/modified from [Hydra](https://github.com/facebookresearch/hydra)
