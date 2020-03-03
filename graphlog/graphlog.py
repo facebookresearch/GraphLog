@@ -48,7 +48,7 @@ class GraphLog:
         pass
 
     def get_dataset_ids(self) -> List[str]:
-        pass
+        return sorted(self.datasets_grouped_by_difficulty.keys())
 
     def get_dataset_by_id(self, id: int) -> Dataset:
         return self.datasets[id]
