@@ -4,8 +4,15 @@ from typing import Dict, List, Any
 from torch.utils.data import DataLoader
 from graphlog.dataset import GraphLogDataset as Dataset
 from graphlog.dataset import get_dataloader
-from graphlog.utils import download_and_extract_archive
+from graphlog.utils import (
+    download_and_extract_archive,
+    get_class,
+    get_num_nodes_edges,
+    get_descriptors,
+    get_avg_resolution_length,
+)
 from tqdm.auto import tqdm
+from addict import Dict as ADict  # type: ignore
 
 
 class GraphLog:
@@ -198,3 +205,29 @@ class GraphLog:
             DataLoader -- [description]
         """
         return get_dataloader(dataset, batch_size, mode)
+
+    def compute_stats_by_dataset(self, name: str) -> Any:
+        """Compute stats for the given world
+        Arguments:
+            name {str} -- [description]
+        Returns:
+            Dict[str, Any] -- [description]
+        """
+        dataset = self.get_dataset_by_name(name)
+        stat = ADict()
+        stat.num_class = len(get_class(dataset.json_graphs))
+        stat.num_des = len(get_descriptors(dataset.json_graphs))
+        stat.avg_resolution_length = get_avg_resolution_length(dataset.json_graphs)
+        stat.num_nodes, stat.num_edges = get_num_nodes_edges(dataset.json_graphs)
+        stat.split = self.get_dataset_split(name)
+        print(
+            "Data Split : {}, Number of Classes : {}, Number of Descriptors : {}, Average Resolution Length : {}, Average number of nodes : {}  and edges : {}".format(  # noqa: E501
+                stat.split,
+                stat.num_class,
+                stat.num_des,
+                stat.avg_resolution_length,
+                stat.num_nodes,
+                stat.num_edges,
+            )
+        )
+        return stat

@@ -220,6 +220,20 @@ def get_avg_resolution_length(world: Dict[str, Any]) -> Any:
     return np.mean(res_length)
 
 
+def get_num_nodes_edges(world: Dict[str, Any]) -> Any:
+    num_nodes = []
+    num_edges = []
+    modes = ["train", "valid", "test"]
+    for mode in modes:
+        graphs = world[mode]
+        for gr in graphs:
+            num_edges.append(len(gr["edges"]))
+            all_nodes = [e[:2] for e in gr["edges"]]
+            all_nodes = [r for n in all_nodes for r in n]
+            num_nodes.append(len(set(all_nodes)))
+    return round(np.mean(num_nodes), 3), round(np.mean(num_edges), 3)
+
+
 def load_networkx_graphs(graphs: List[Dict[str, Any]]) -> Tuple[List[Any], List[Any]]:
     nx_graphs = []
     query_nodes = []
