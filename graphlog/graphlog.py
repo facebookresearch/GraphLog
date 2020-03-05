@@ -4,6 +4,7 @@ from typing import Dict, List, Any
 
 from graphlog.dataset import GraphLogDataset as Dataset
 from graphlog.utils import download_and_extract_archive
+from tqdm.auto import tqdm
 
 
 class GraphLog:
@@ -17,7 +18,6 @@ class GraphLog:
     def __init__(self, data_dir: str = "./data/"):
         self.data_dir = data_dir
         self.download()
-        self.datasets: List[Dataset] = self.load_datasets()
         self.datasets_grouped_by_difficulty: Dict[str, List[int]] = {
             "easy": [
                 9,
@@ -64,9 +64,10 @@ class GraphLog:
             ],
             "hard": [0, 1, 2, 3, 5, 6, 13, 14, 15, 16, 17, 23, 25, 29, 30, 42, 44, 53],
         }
+        self.datasets_by_split = self.get_dataset_names_by_split()
         # get proper label2id
         self.label2id = self.get_label2id()
-        pass
+        self.datasets: Dict[str, Dataset] = {}
 
     def _get_datafile_path(self) -> str:
         return os.path.join(self.data_dir, self.data_filename)
@@ -95,19 +96,58 @@ class GraphLog:
         label2id = json.load(open(label2id_loc))
         return label2id
 
-    def load_datasets(self) -> List[Dataset]:
-        pass
+    def load_datasets(self) -> None:
+        """Load all datasets
+        Returns:
+            Dict[str, Dataset] -- [description]
+        """
+        data_names = self.get_dataset_names_by_split()
+        all_datasets = {}
+        for mode, names in data_names.items():
+            print("Loading {} {} datasets ...".format(len(names), mode))
+            pb = tqdm(total=len(names))
+            for name in names:
+                all_datasets[name] = self._load_single_dataset(mode, name)
+                pb.update(1)
+            pb.close()
+        self.datasets = all_datasets
+
+    def _load_single_dataset(self, mode: str, name: str) -> Dataset:
+        return Dataset(
+            data_loc=os.path.join(self.data_dir, self.data_filename, mode, name),
+            world_id=name,
+            label2id=self.get_label2id(),
+        )
 
     def get_dataset_ids(self) -> List[str]:
         return sorted(self.datasets_grouped_by_difficulty.keys())
 
-    def get_dataset_by_id(self, id: int) -> Dataset:
-        return self.datasets[id]
+    def get_dataset_split(self, name: str) -> str:
+        # determine mode
+        if name in self.datasets_by_split["train"]:
+            mode = "train"
+        elif name in self.datasets_by_split["valid"]:
+            mode = "valid"
+        elif name in self.datasets_by_split["test"]:
+            mode = "test"
+        else:
+            raise FileNotFoundError(
+                name
+                + " not found in any splits of GraphLog. "
+                + "To view all available datasets, use `get_dataset_names_by_split`"
+            )
+        return mode
+
+    def get_dataset_by_name(self, name: str) -> Dataset:
+        mode = self.get_dataset_split(name)
+        if name not in self.datasets:
+            self.datasets[name] = self._load_single_dataset(mode, name)
+        return self.datasets[name]
 
     def _get_dataset_by_difficulty(self, difficulty: str) -> List[Dataset]:
         assert difficulty in self.datasets_grouped_by_difficulty.keys()
         return [
-            self.get_dataset_by_id(id)
+            self.get_dataset_by_name("rule_{}".format(id))
             for id in self.datasets_grouped_by_difficulty[difficulty]
         ]
 

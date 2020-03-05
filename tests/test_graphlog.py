@@ -1,5 +1,6 @@
 from graphlog import GraphLog
 import os
+from torch.utils.data import Dataset
 
 
 def test_download() -> None:
@@ -35,3 +36,17 @@ def test_paper_data_ids() -> None:
         assert world in data_by_split["valid"]
     for world in test_ids:
         assert world in data_by_split["test"]
+
+
+def test_single_dataset() -> None:
+    gl = GraphLog()
+    dataset = gl.get_dataset_by_name("rule_0")
+    assert isinstance(dataset, Dataset)
+    assert len(gl.datasets) == 1
+
+
+# takes a long time
+def _test_all_dataset_loading() -> None:
+    gl = GraphLog()
+    gl.load_datasets()
+    assert len(gl.datasets) == 57
