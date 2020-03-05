@@ -1,8 +1,9 @@
 import os
 import json
 from typing import Dict, List, Any
-
+from torch.utils.data import DataLoader
 from graphlog.dataset import GraphLogDataset as Dataset
+from graphlog.dataset import get_dataloader
 from graphlog.utils import download_and_extract_archive
 from tqdm.auto import tqdm
 
@@ -183,3 +184,17 @@ class GraphLog:
             ]
             datasets_grouped_by_split[mode].extend([d.split("/")[-1] for d in dirs])
         return datasets_grouped_by_split
+
+    def get_dataloader_by_mode(
+        self, dataset: Dataset, batch_size: int, mode: str = "train"
+    ) -> DataLoader:
+        """Get relevant dataloader of the dataset object
+        Arguments:
+            dataset {Dataset} -- GraphLogDataset object
+            batch_size {int} -- integer
+        Keyword Arguments:
+            mode {str} -- [description] (default: {"train"})
+        Returns:
+            DataLoader -- [description]
+        """
+        return get_dataloader(dataset, batch_size, mode)
