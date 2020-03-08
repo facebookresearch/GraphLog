@@ -112,6 +112,7 @@ class GraphLogDataset(Dataset):  # type: ignore
         self.unique_edge_dict: Dict[str, int] = {}
         if load_graph:
             self.load_data(rule_world=self.rule_world)
+            self.populate_data_rows()
         else:
             if populate_labels:
                 self.populate_labels(self.rule_world)
