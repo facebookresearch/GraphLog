@@ -1,6 +1,9 @@
-from graphlog import GraphLog
 import os
+
+import torch
 from torch.utils.data import Dataset
+
+from graphlog import GraphLog
 
 
 def test_download() -> None:
@@ -45,8 +48,7 @@ def test_single_dataset() -> None:
     assert len(gl.datasets) == 1
 
 
-# takes a long time
-def _test_all_dataset_loading() -> None:
+def test_all_dataset_loading() -> None:
     gl = GraphLog()
     gl.load_datasets()
     assert len(gl.datasets) == 57
