@@ -36,21 +36,6 @@ class GraphRow:
         self.json_graph = json_graph
 
 
-# class GraphDataLoader(Dataset):
-#     """
-#     Graph Data loader instance
-#     """
-
-#     def __init__(self, dataRows: List[GraphRow]):
-#         self.dataRows = dataRows
-
-#     def __getitem__(self, item):
-#         return self.dataRows[item]
-
-#     def __len__(self):
-#         return len(self.dataRows)
-
-
 class GraphLogDataset(Dataset):  # type: ignore
     """GraphLog dataset instance
     Contains all information about a single world
