@@ -53,6 +53,30 @@ def test_all_dataset_loading() -> None:
     gl.load_datasets()
     assert len(gl.datasets) == 57
 
+
+def test_single_dataloader() -> None:
+    gl = GraphLog()
+    device = (
+        torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")
+    )
+    cpu_device = torch.device("cpu")
+    dataset = gl.get_dataset_by_name(name="rule_0")
+    batch_size = 32
+    dataloader_size = {"train": 157, "valid": 32, "test": 32}
+    for mode, size in dataloader_size.items():
+        dataloader = gl.get_dataloader_by_mode(
+            dataset=dataset, batch_size=batch_size, mode=mode
+        )
+        for batch in dataloader:
+            assert len(batch.targets) == batch_size
+            assert len(batch.queries) == len(batch.targets)
+            assert batch.targets.device == cpu_device
+            batch.to(device)
+            assert batch.targets.device == device
+            break
+        assert len(dataloader) == size
+
+
 def test_stats() -> None:
     gl = GraphLog()
     stats = gl.compute_stats_by_dataset(name="rule_0")
