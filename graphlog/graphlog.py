@@ -1,18 +1,20 @@
-import os
 import json
-from typing import Dict, List, Any
-from torch.utils.data import DataLoader
+import os
+from typing import Dict, List
+
+from addict import Dict as ADict
+from tqdm.auto import tqdm
+
 from graphlog.dataset import GraphLogDataset as Dataset
 from graphlog.dataset import get_dataloader
+from graphlog.types import DataLoaderType, StatType
 from graphlog.utils import (
     download_and_extract_archive,
-    get_class,
-    get_num_nodes_edges,
-    get_descriptors,
     get_avg_resolution_length,
+    get_class,
+    get_descriptors,
+    get_num_nodes_edges,
 )
-from tqdm.auto import tqdm
-from addict import Dict as ADict  # type: ignore
 
 
 class GraphLog:
@@ -97,11 +99,12 @@ class GraphLog:
             md5=self.md5hash,
         )
 
-    def get_label2id(self) -> Any:
+    def get_label2id(self) -> Dict[str, int]:
         label2id_loc = os.path.join(
             self.data_dir, self.data_filename, "train", "label2id.json"
         )
         label2id = json.load(open(label2id_loc))
+        assert isinstance(label2id, dict)
         return label2id
 
     def load_datasets(self) -> None:
@@ -194,7 +197,7 @@ class GraphLog:
 
     def get_dataloader_by_mode(
         self, dataset: Dataset, batch_size: int, mode: str = "train"
-    ) -> DataLoader:
+    ) -> DataLoaderType:
         """Get relevant dataloader of the dataset object
         Arguments:
             dataset {Dataset} -- GraphLogDataset object
@@ -206,7 +209,7 @@ class GraphLog:
         """
         return get_dataloader(dataset, batch_size, mode)
 
-    def compute_stats_by_dataset(self, name: str) -> Any:
+    def compute_stats_by_dataset(self, name: str) -> StatType:
         """Compute stats for the given world
         Arguments:
             name {str} -- [description]
@@ -230,4 +233,5 @@ class GraphLog:
                 stat.num_edges,
             )
         )
+        assert isinstance(stat, dict)
         return stat
