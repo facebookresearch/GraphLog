@@ -23,13 +23,13 @@ jobs:
             export NOX_PYTHON_VERSIONS=3.6
             ~/miniconda3/bin/conda create -n graphlog python=3.6 -q -y
             ~/miniconda3/bin/conda run -n graphlog pip install nox
-            ~/miniconda3/bin/conda run -n graphlog python3 -m nox
+            ~/miniconda3/bin/conda run -n graphlog PYTHONPATH=. python3 -m nox
       - run:
           name: "Test graphlog"
           no_output_timeout: 60m
           command: |
             ~/miniconda3/bin/conda run -n graphlog pip install nox
-            ~/miniconda3/bin/conda run -n graphlog python3 -m nox
+            ~/miniconda3/bin/conda run -n graphlog PYTHONPATH=. python3 -m nox
 
   py37_linux:
     docker:
@@ -49,13 +49,13 @@ jobs:
             export NOX_PYTHON_VERSIONS=3.6
             ~/miniconda3/bin/conda create -n graphlog python=3.7 -q -y
             ~/miniconda3/bin/conda run -n graphlog pip install nox
-            ~/miniconda3/bin/conda run -n graphlog python3 -m nox
+            ~/miniconda3/bin/conda run -n PYTHONPATH=. graphlog python3 -m nox
       - run:
           name: "Test graphlog"
           no_output_timeout: 60m
           command: |
             ~/miniconda3/bin/conda run -n graphlog pip install nox
-            ~/miniconda3/bin/conda run -n graphlog python3 -m nox
+            ~/miniconda3/bin/conda run -n PYTHONPATH=. graphlog python3 -m nox
 
   py38_linux:
     docker:
@@ -75,13 +75,13 @@ jobs:
             export NOX_PYTHON_VERSIONS=3.6
             ~/miniconda3/bin/conda create -n graphlog python=3.8 -q -y
             ~/miniconda3/bin/conda run -n graphlog pip install nox
-            ~/miniconda3/bin/conda run -n graphlog python3 -m nox
+            ~/miniconda3/bin/conda run -n PYTHONPATH=. graphlog python3 -m nox
       - run:
           name: "Test graphlog"
           no_output_timeout: 60m
           command: |
             ~/miniconda3/bin/conda run -n graphlog pip install nox
-            ~/miniconda3/bin/conda run -n graphlog python3 -m nox
+            ~/miniconda3/bin/conda run -n graphlog PYTHONPATH=. python3 -m nox
 
 workflows:
   version: 2
