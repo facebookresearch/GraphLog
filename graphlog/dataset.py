@@ -1,13 +1,16 @@
-import os
-from typing import List, Dict, Any, Set, Tuple
-import numpy as np  # type: ignore
-import json
 import copy
+import json
+import os
+from typing import Dict, List, Optional, Set, Tuple
+
+import numpy as np
 import torch
 from torch import Tensor
 from torch.utils.data import DataLoader, Dataset
-from torch_geometric.data import Batch as GeometricBatch  # type: ignore
+from torch_geometric.data import Batch as GeometricBatch
 from torch_geometric.data import Data as GeometricData
+
+from graphlog.types import DataLoaderType, GraphType
 
 UNK_LABEL = "UNK_REL"
 
@@ -18,12 +21,12 @@ class GraphRow:
 
     def __init__(
         self,
-        graph: Any = None,
-        query: Any = None,
-        label: Any = None,
-        world_graph: Any = None,
-        edge_graph: Any = None,
-        json_graph: Any = None,
+        graph: GeometricData,
+        query: np.ndarray,
+        label: np.int64,
+        world_graph: GeometricData,
+        edge_graph: Optional[GeometricData] = None,
+        json_graph: GraphType = None,
     ):
         self.graph = graph
         self.edge_graph = edge_graph
@@ -102,7 +105,12 @@ class GraphLogDataset(Dataset):  # type: ignore
         }
         self.path_len: Dict[str, List[int]] = {"train": [], "test": [], "valid": []}
         # contains the raw json graphs
-        self.json_graphs: Dict[str, List[Any]] = {"train": [], "test": [], "valid": []}
+
+        self.json_graphs: Dict[str, List[GraphType]] = {
+            "train": [],
+            "test": [],
+            "valid": [],
+        }
         self.json_meta_graph = None
         self.label_set: Set[int] = set()
         self.world_graph = None
@@ -188,14 +196,13 @@ class GraphLogDataset(Dataset):  # type: ignore
                 x = torch.arange(len(node2id)).unsqueeze(1)
 
                 edge_index = list(zip(*edges))
-                edge_index = torch.LongTensor(edge_index)  # 2 x num_edges
+                edge_index = torch.LongTensor(edge_index)  # type: ignore
+                # 2 x num_edges
                 assert edge_index.dim() == 2  # type: ignore
-                edge_attr = torch.tensor(edge_attr)
-
                 geo_data = GeometricData(
                     x=x,
                     edge_index=edge_index,
-                    edge_attr=edge_attr,
+                    edge_attr=torch.tensor(edge_attr),
                     y=torch.tensor([target]),
                 )
                 self.graphs[mode].append(geo_data)
@@ -229,15 +236,15 @@ class GraphLogDataset(Dataset):  # type: ignore
                     edge_indicator.append(self.get_label2id(elem[2]) + 1)
                 x = torch.arange(edge_ct).unsqueeze(1)
                 edge_index = list(zip(*edges))
-                edge_index = torch.LongTensor(edge_index)  # 2 x num_edges
+                edge_index = torch.LongTensor(edge_index)  # type: ignore
+                # 2 x num_edges
                 if edge_index.dim() != 2:  # type: ignore
                     raise AssertionError("edge index dimension should be 2")
-                edge_indicator = torch.tensor(edge_indicator)
                 edge_mapping = edge_mapping.unsqueeze(0)  # 1 x num_unique_edges x dim
                 self.world_graph = GeometricData(
                     x=x,
                     edge_index=edge_index,
-                    edge_indicator=edge_indicator,
+                    edge_indicator=torch.tensor(edge_indicator),
                     edge_mapping=edge_mapping,
                 )
 
@@ -279,7 +286,7 @@ class GraphLogDataset(Dataset):  # type: ignore
         """
         return len(self.graphs[mode])
 
-    def __getitem__(self, index: int) -> Tensor:
+    def __getitem__(self, index: int) -> GraphRow:
         return self.data_rows[self.data_mode][index]
 
     def __len__(self) -> int:
@@ -297,14 +304,14 @@ class GraphBatch:
     def __init__(
         self,
         graphs: List[GeometricData],
-        queries: List[Any],
-        targets: List[Any],
-        world_graphs: Any = None,
+        queries: Tensor,
+        targets: Tensor,
+        world_graphs: GeometricData = None,
     ):
         self.num_nodes = [g.num_nodes for g in graphs]
         self.num_edge_nodes = [g.num_nodes for g in world_graphs]
         self.graphs = GeometricBatch.from_data_list(graphs)
-        self.queries = torch.LongTensor(queries)
+        self.queries = torch.LongTensor(queries)  # type: ignore
         self.targets = torch.tensor(targets).long()
         self.edge_indicator = [g["edge_indicator"] for g in world_graphs]
         self.edge_mapping = [g["edge_mapping"] for g in world_graphs]
@@ -319,7 +326,7 @@ class GraphBatch:
 
     def to(self, device: str) -> None:
         self.graphs = self.graphs.to(device)
-        self.queries = self.queries.to(device)
+        self.queries = self.queries.to(device)  # type: ignore
         self.targets = self.targets.to(device)
         self.edge_graphs = self.edge_graphs.to(device)
         self.edge_indicator = [ei.to(device) for ei in self.edge_indicator]
@@ -327,7 +334,7 @@ class GraphBatch:
         self.world_graphs = self.world_graphs.to(device)
 
 
-def pyg_collate(data: Any) -> GraphBatch:
+def pyg_collate(data: List[GraphRow]) -> GraphBatch:
     """
     Custom collate function
     :param data:
@@ -340,9 +347,9 @@ def pyg_collate(data: Any) -> GraphBatch:
     # num_nodes = torch.zeros(len(data), 1)
     for id, d in enumerate(data):
         graphs.append(d.graph)
-        queries[id][0] = torch.LongTensor([d.query[0]])
-        queries[id][1] = torch.LongTensor([d.query[1]])
-        labels[id] = torch.LongTensor([d.label])
+        queries[id][0] = torch.LongTensor([d.query[0]])  # type: ignore
+        queries[id][1] = torch.LongTensor([d.query[1]])  # type: ignore
+        labels[id] = torch.LongTensor([d.label])  # type: ignore
         # num_nodes[id] = d.graph.num_nodes
         if id == 0:
             # only add world_graphs once
@@ -354,7 +361,7 @@ def pyg_collate(data: Any) -> GraphBatch:
 
 def get_dataloader(
     dataset: GraphLogDataset, batch_size: int, mode: str = "train"
-) -> DataLoader:
+) -> DataLoaderType:
     """Return dataloader for the specific mode (train/test/valid)
     :param modes:
     :return:
