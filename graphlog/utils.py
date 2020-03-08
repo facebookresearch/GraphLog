@@ -1,19 +1,20 @@
 # Some of this code is taken from: https://github.com/pytorch/vision/blob/master/torchvision/datasets/utils.py
 import hashlib
+import json
 import os
 import urllib
 import zipfile
-from typing import List, Dict, Any, Set, Tuple
-from typing import Callable
-
-# import matplotlib.pyplot as plt  # type: ignore
-import networkx as nx  # type: ignore
-import json
 from os import path
-from addict import Dict as ADict  # type: ignore
-import numpy as np  # type: ignore
+from typing import Any, Callable, Dict, List, Set, Tuple
 
+import networkx as nx
+import numpy as np
+from addict import Dict as ADict
+
+# from ipdb import set_trace
 from tqdm.auto import tqdm
+
+from graphlog.types import GraphType, WorldType
 
 
 def check_md5(fpath: str, md5: str) -> bool:
@@ -110,6 +111,7 @@ def download_url(url: str, download_dir: str, filename: str, md5: str) -> None:
 
 # load graphs
 def load_graphs(full_data_path: str) -> List[Any]:
+    # set_trace()
     graphs = []
     with open(full_data_path, "r") as fp:
         for line in fp:
@@ -117,7 +119,7 @@ def load_graphs(full_data_path: str) -> List[Any]:
     return graphs
 
 
-def get_rel_pattern(g: Dict[str, Any]) -> str:
+def get_rel_pattern(g: Dict[str, GraphType]) -> str:
     res_path = g["resolution_path"]
     dt = {}
     for e in g["edges"]:
@@ -135,6 +137,7 @@ def get_path_dict(
     """get all paths
     Return: dictionary containing {mode:{rule_worlds}}
     """
+    # set_trace()
     loc = os.path.join(data_loc, data_name)
     all_paths = {}
     modes = ["train", "valid", "test"]
@@ -163,6 +166,7 @@ def get_paths(mode: str, rule_folder: str, loc: str) -> ADict:
 
 
 def load_world(paths: Dict[str, Any]) -> ADict:
+    # set_trace()
     world = ADict()
     world.paths = paths
     world.config = json.load(open(paths.config_path))  # type: ignore
@@ -176,12 +180,13 @@ def load_world(paths: Dict[str, Any]) -> ADict:
 
 def get_all_worlds(
     data_name: str = "", data_loc: str = "", all_paths: Any = None
-) -> Dict[str, Any]:
+) -> Dict[str, WorldType]:
     """load and return the json of all worlds
     """
+    # set_trace()
     if not all_paths:
         all_paths, loc = get_path_dict(data_name, data_loc)
-    worlds: Dict[str, Any] = {}
+    worlds: Dict[str, WorldType] = {}
     for mode, rule_worlds in all_paths.items():
         worlds[mode] = {}
         for rule_world in rule_worlds:
@@ -190,7 +195,7 @@ def get_all_worlds(
 
 
 # more helper functions
-def get_class(world: Dict[str, Any]) -> Set[str]:
+def get_class(world: WorldType) -> Set[str]:
     modes = ["train", "valid", "test"]
     cls = []
     for mode in modes:
@@ -200,7 +205,7 @@ def get_class(world: Dict[str, Any]) -> Set[str]:
     return set(cls)
 
 
-def get_descriptors(world: Dict[str, Any]) -> List[str]:
+def get_descriptors(world: WorldType) -> List[str]:
     modes = ["train", "valid", "test"]
     des = []
     for mode in modes:
@@ -210,7 +215,7 @@ def get_descriptors(world: Dict[str, Any]) -> List[str]:
     return des
 
 
-def get_avg_resolution_length(world: Dict[str, Any]) -> Any:
+def get_avg_resolution_length(world: WorldType) -> Any:
     modes = ["train", "valid", "test"]
     res_length = []
     for mode in modes:
@@ -220,7 +225,7 @@ def get_avg_resolution_length(world: Dict[str, Any]) -> Any:
     return np.mean(res_length)
 
 
-def get_num_nodes_edges(world: Dict[str, Any]) -> Any:
+def get_num_nodes_edges(world: WorldType) -> Any:
     num_nodes = []
     num_edges = []
     modes = ["train", "valid", "test"]
@@ -235,6 +240,7 @@ def get_num_nodes_edges(world: Dict[str, Any]) -> Any:
 
 
 def load_networkx_graphs(graphs: List[Dict[str, Any]]) -> Tuple[List[Any], List[Any]]:
+    # set_trace()
     nx_graphs = []
     query_nodes = []
     for graph in graphs:
