@@ -52,3 +52,18 @@ def test_all_dataset_loading() -> None:
     gl = GraphLog()
     gl.load_datasets()
     assert len(gl.datasets) == 57
+
+def test_stats() -> None:
+    gl = GraphLog()
+    stats = gl.compute_stats_by_dataset(name="rule_0")
+    expected_stats = {
+        "num_class": 17,
+        "num_des": 286,
+        "avg_resolution_length": 4.485714285714286,
+        "num_nodes": 15.487,
+        "num_edges": 19.295,
+        "split": "train",
+    }
+    assert len(stats) == len(expected_stats)
+    for key in expected_stats:
+        assert expected_stats[key] == stats[key]
