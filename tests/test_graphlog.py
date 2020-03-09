@@ -1,9 +1,11 @@
 import os
 
 import torch
+from networkx import DiGraph
 from torch.utils.data import Dataset
 
 from graphlog import GraphLog
+from graphlog.utils import load_networkx_graphs
 
 
 def test_download() -> None:
@@ -91,3 +93,15 @@ def test_stats() -> None:
     assert len(stats) == len(expected_stats)
     for key in expected_stats:
         assert expected_stats[key] == stats[key]
+
+
+def test_load_networkx_graphs() -> None:
+    gl = GraphLog()
+    dataset = gl.get_dataset_by_name("rule_0")
+    nx_graphs, query_nodes = load_networkx_graphs(dataset.json_graphs["train"])
+    assert len(nx_graphs) == 5000
+    assert isinstance(nx_graphs[0], DiGraph)
+    assert len(nx_graphs[0]) == 35
+    assert len(query_nodes) == 500
+    for nodes in query_nodes:
+        assert len(query_nodes) == 2
