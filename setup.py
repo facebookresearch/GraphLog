@@ -3,7 +3,7 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-with open("requirements/base.txt") as f:
+with open("requirements/cpu.txt") as f:
     base_requirements = f.read().splitlines()
 
 with open("requirements/dev.txt") as f:
@@ -11,9 +11,9 @@ with open("requirements/dev.txt") as f:
 
 setuptools.setup(
     name="graphlog",
-    version="0.0.1",
+    version="1.0.0rc2",
     author="Koustuv Sinha and Shagun Sodhani",
-    author_email="koustuv.sinha@mail.mcgill.ca and sshagunsodhani@gmail.com",
+    author_email="sshagunsodhani@gmail.com",
     description="API to interface with the GraphLog Dataset",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
