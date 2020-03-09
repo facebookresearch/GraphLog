@@ -19,7 +19,9 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     install_requires=base_requirements,
     url="",
-    packages=["graphlog"],
+    packages=setuptools.find_packages(
+        exclude=["*.tests", "*.tests.*", "tests.*", "tests", "docs", "docsrc"]
+    ),
     classifiers=[
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",

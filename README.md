@@ -10,21 +10,23 @@ API to interface with the GraphLog Dataset
 
 Alternatively, `pip install git+ssh://git@github.com/fairinternal/GraphLog.git@master#egg=graphlog`
 
+### Documentation
+
+
 ### Use
 
 
 
 
-### Documentation
+
 
 
 ### Dev Setup
 
-* `pip install -e .[dev] -e .`
+* `pip install -e ".[dev]"`
 * Install pre-commit hooks `pre-commit install`
 * The code is linted using:
     * `black`
     * `flake8`
     * `mypy`
-* CI currently only checks for linting. 
-* Lint tests can be run locally using `nox -s lint`
+* All the tests can be run locally using `nox`

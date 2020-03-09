@@ -1,11 +1,20 @@
 # Some of this code is taken from: https://github.com/pytorch/vision/blob/master/torchvision/datasets/utils.py
 import hashlib
+import json
 import os
 import urllib
 import zipfile
-from typing import Callable
+from os import path
+from typing import Any, Callable, Dict, List, Set, Tuple
 
-import tqdm
+import networkx as nx
+import numpy as np
+from addict import Dict as ADict
+
+# from ipdb import set_trace
+from tqdm.auto import tqdm
+
+from graphlog.types import GraphType, WorldType
 
 
 def check_md5(fpath: str, md5: str) -> bool:
@@ -35,11 +44,10 @@ def download_and_extract_archive(
 ) -> None:
 
     archive_filename = "data.zip"
-    data_filename = filename
     download_url(url=url, download_dir=download_dir, filename=archive_filename, md5=md5)
 
     archive_path = os.path.join(download_dir, archive_filename)
-    data_path = os.path.join(download_dir, data_filename)
+    data_path = os.path.join(download_dir)
     print("Extracting {} to {}".format(archive_path, data_path))
     extract_archive(from_path=archive_path, to_path=data_path)
 
@@ -97,3 +105,162 @@ def download_url(url: str, download_dir: str, filename: str, md5: str) -> None:
         # check integrity of downloaded file
         if not check_integrity(fpath, md5):
             raise RuntimeError("File not found or corrupted.")
+
+
+# Dataset utils
+
+# load graphs
+def load_graphs(full_data_path: str) -> List[Any]:
+    # set_trace()
+    graphs = []
+    with open(full_data_path, "r") as fp:
+        for line in fp:
+            graphs.append(json.loads(line))
+    return graphs
+
+
+def get_rel_pattern(g: Dict[str, GraphType]) -> str:
+    res_path = g["resolution_path"]
+    dt = {}
+    for e in g["edges"]:
+        dt[(e[0], e[1])] = e[2]
+    pattern = []
+    for i in range(len(res_path) - 1):
+        e = (res_path[i], res_path[i + 1])
+        pattern.append(dt[e])
+    return ",".join(pattern)
+
+
+def get_path_dict(
+    data_name: str = "", data_loc: str = ""
+) -> Tuple[Dict[str, Any], str]:
+    """get all paths
+    Return: dictionary containing {mode:{rule_worlds}}
+    """
+    # set_trace()
+    loc = os.path.join(data_loc, data_name)
+    all_paths = {}
+    modes = ["train", "valid", "test"]
+    for mode in modes:
+        data_path = os.path.join(loc, mode)
+        all_paths[mode] = [
+            folder
+            for folder in os.listdir(data_path)
+            if os.path.isdir(os.path.join(data_path, folder))
+        ]
+    return all_paths, loc
+
+
+# loading helper functions
+def get_paths(mode: str, rule_folder: str, loc: str) -> ADict:
+    paths = ADict()
+    paths.mode = mode
+    paths.rule_folder = rule_folder
+    paths.config_path = path.join(loc, mode, rule_folder, "config.json")
+    paths.train_path = path.join(loc, mode, rule_folder, "train.jsonl")
+    paths.test_path = path.join(loc, mode, rule_folder, "test.jsonl")
+    paths.valid_path = path.join(loc, mode, rule_folder, "valid.jsonl")
+    paths.meta_graph_path = path.join(loc, mode, rule_folder, "meta_graph.jsonl")
+    paths.graph_prop_path = path.join(loc, mode, rule_folder, "graph_prop.json")
+    return paths
+
+
+def load_world(paths: Dict[str, Any]) -> ADict:
+    # set_trace()
+    world = ADict()
+    world.paths = paths
+    world.config = json.load(open(paths.config_path))  # type: ignore
+    world.train = load_graphs(paths.train_path)  # type: ignore
+    world.test = load_graphs(paths.test_path)  # type: ignore
+    world.valid = load_graphs(paths.valid_path)  # type: ignore
+    world.meta_graph = load_graphs(paths.meta_graph_path)  # type: ignore
+    # world.graph_prop = json.load(graph_prop_path)
+    return world
+
+
+def get_all_worlds(
+    data_name: str = "", data_loc: str = "", all_paths: Any = None
+) -> Dict[str, WorldType]:
+    """load and return the json of all worlds
+    """
+    # set_trace()
+    if not all_paths:
+        all_paths, loc = get_path_dict(data_name, data_loc)
+    worlds: Dict[str, WorldType] = {}
+    for mode, rule_worlds in all_paths.items():
+        worlds[mode] = {}
+        for rule_world in rule_worlds:
+            worlds[mode][rule_world] = load_world(get_paths(mode, rule_world, loc))
+    return worlds
+
+
+# more helper functions
+def get_class(world: WorldType) -> Set[str]:
+    modes = ["train", "valid", "test"]
+    cls = []
+    for mode in modes:
+        graphs = world[mode]
+        for g in graphs:
+            cls.append(g["query"][-1])
+    return set(cls)
+
+
+def get_descriptors(world: WorldType) -> List[str]:
+    modes = ["train", "valid", "test"]
+    des = []
+    for mode in modes:
+        graphs = world[mode]
+        des.extend([get_rel_pattern(g) for g in graphs])
+    des = list(set(des))
+    return des
+
+
+def get_avg_resolution_length(world: WorldType) -> Any:
+    modes = ["train", "valid", "test"]
+    res_length = []
+    for mode in modes:
+        graphs = world[mode]
+        le = [len(get_rel_pattern(g).split(",")) for g in graphs]
+        res_length.extend(le)
+    return np.mean(res_length)
+
+
+def get_num_nodes_edges(world: WorldType) -> Any:
+    num_nodes = []
+    num_edges = []
+    modes = ["train", "valid", "test"]
+    for mode in modes:
+        graphs = world[mode]
+        for gr in graphs:
+            num_edges.append(len(gr["edges"]))
+            all_nodes = [e[:2] for e in gr["edges"]]
+            all_nodes = [r for n in all_nodes for r in n]
+            num_nodes.append(len(set(all_nodes)))
+    return round(np.mean(num_nodes), 3), round(np.mean(num_edges), 3)
+
+
+def load_networkx_graphs(graphs: List[Dict[str, Any]]) -> Tuple[List[Any], List[Any]]:
+    # set_trace()
+    nx_graphs = []
+    query_nodes = []
+    for graph in graphs:
+        g = nx.DiGraph()
+        nodes: Dict[int, int] = {}
+        for edge in graph["edges"]:
+            if edge[0] not in nodes:
+                nodes[edge[0]] = len(nodes)
+            if edge[1] not in nodes:
+                nodes[edge[1]] = len(nodes)
+            in_resolution = (edge[0] in graph["resolution_path"]) & (
+                edge[1] in graph["resolution_path"]
+            )
+            g.add_edge(
+                nodes[edge[0]],
+                nodes[edge[1]],
+                data={"relation": edge[2], "in_resolution": in_resolution},
+            )
+        g.node[nodes[graph["query"][0]]]["is_query"] = True
+        g.node[nodes[graph["query"][1]]]["is_query"] = True
+        nx_graphs.append(g)
+        query_nodes.append((nodes[graph["query"][0]], nodes[graph["query"][1]]))
+    return nx_graphs, query_nodes
