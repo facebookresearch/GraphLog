@@ -28,4 +28,4 @@ def test(session) -> None:
     session.install("--upgrade", "setuptools", "pip")
     install_base_packages(session)
     session.install("-r", "requirements/dev.txt")
-    session.run("pytest", "tests")
+    session.run("python", "-m", "pytest", "tests")
