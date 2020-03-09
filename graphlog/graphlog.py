@@ -196,7 +196,7 @@ class GraphLog:
         return datasets_grouped_by_split
 
     def get_dataloader_by_mode(
-        self, dataset: Dataset, batch_size: int, mode: str = "train"
+        self, dataset: Dataset, mode: str = "train", **kwargs
     ) -> DataLoaderType:
         """Get relevant dataloader of the dataset object
         Arguments:
@@ -207,7 +207,7 @@ class GraphLog:
         Returns:
             DataLoader -- [description]
         """
-        return get_dataloader(dataset, batch_size, mode)
+        return get_dataloader(dataset, mode, **kwargs)
 
     def compute_stats_by_dataset(self, name: str) -> StatType:
         """Compute stats for the given world
