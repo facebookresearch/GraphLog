@@ -7,10 +7,10 @@ import numpy as np
 import torch
 from torch import Tensor
 from torch.utils.data import DataLoader, Dataset
-from torch_geometric.data import Batch as GeometricBatch
-from torch_geometric.data import Data as GeometricData
 
 from graphlog.types import DataLoaderType, GraphType
+from torch_geometric.data import Batch as GeometricBatch
+from torch_geometric.data import Data as GeometricData
 
 UNK_LABEL = "UNK_REL"
 
@@ -298,7 +298,7 @@ class GraphBatch:
         self.num_edge_nodes = [g.num_nodes for g in world_graphs]
         self.graphs = GeometricBatch.from_data_list(graphs)
         self.queries = torch.LongTensor(queries)  # type: ignore
-        self.targets = torch.tensor(targets).long()
+        self.targets = targets.long()
         self.edge_indicator = [g["edge_indicator"] for g in world_graphs]
         self.edge_mapping = [g["edge_mapping"] for g in world_graphs]
         filtered_list = []
