@@ -1,7 +1,7 @@
 import copy
 import json
 import os
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 import numpy as np
 import torch
@@ -346,7 +346,7 @@ def pyg_collate(data: List[GraphRow]) -> GraphBatch:
 
 
 def get_dataloader(
-    dataset: GraphLogDataset, mode: str = "train", **kwargs
+    dataset: GraphLogDataset, mode: str = "train", **kwargs: Any
 ) -> DataLoaderType:
     """Return dataloader for the specific mode (train/test/valid)
     :param modes:

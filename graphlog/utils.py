@@ -1,6 +1,5 @@
 # Some of this code is taken from: https://github.com/pytorch/vision/blob/master/torchvision/datasets/utils.py
 import hashlib
-import json
 import os
 import urllib
 import zipfile
@@ -179,7 +178,9 @@ def get_num_nodes_edges(world: WorldType) -> Any:
     return round(np.mean(num_nodes), 3), round(np.mean(num_edges), 3)
 
 
-def load_networkx_graphs(graphs: List[Dict[str, Any]]) -> Tuple[List[Any], List[Any]]:
+def load_networkx_graphs(
+    graphs: List[Dict[str, Any]]
+) -> Tuple[List[nx.DiGraph], List[Tuple[int, int]]]:
     nx_graphs = []
     query_nodes = []
     for graph in graphs:

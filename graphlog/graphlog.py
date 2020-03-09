@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Dict, List
+from typing import Any, Dict, List
 
 from addict import Dict as ADict
 from tqdm.auto import tqdm
@@ -196,7 +196,7 @@ class GraphLog:
         return datasets_grouped_by_split
 
     def get_dataloader_by_mode(
-        self, dataset: Dataset, mode: str = "train", **kwargs
+        self, dataset: Dataset, mode: str = "train", **kwargs: Any
     ) -> DataLoaderType:
         """Get relevant dataloader of the dataset object
         Arguments:
