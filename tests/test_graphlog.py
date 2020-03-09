@@ -102,6 +102,6 @@ def test_load_networkx_graphs() -> None:
     assert len(nx_graphs) == 5000
     assert isinstance(nx_graphs[0], DiGraph)
     assert len(nx_graphs[0]) == 35
-    assert len(query_nodes) == 500
+    assert len(query_nodes) == 5000
     for nodes in query_nodes:
-        assert len(query_nodes) == 2
+        assert len(nodes) == 2
