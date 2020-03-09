@@ -1,6 +1,5 @@
 # Some of this code is taken from: https://github.com/pytorch/vision/blob/master/torchvision/datasets/utils.py
 import hashlib
-import json
 import os
 import urllib
 import zipfile
@@ -10,8 +9,6 @@ from typing import Any, Callable, Dict, List, Set, Tuple
 import networkx as nx
 import numpy as np
 from addict import Dict as ADict
-
-# from ipdb import set_trace
 from tqdm.auto import tqdm
 
 from graphlog.types import GraphType, WorldType
@@ -109,15 +106,6 @@ def download_url(url: str, download_dir: str, filename: str, md5: str) -> None:
 
 # Dataset utils
 
-# load graphs
-def load_graphs(full_data_path: str) -> List[Any]:
-    # set_trace()
-    graphs = []
-    with open(full_data_path, "r") as fp:
-        for line in fp:
-            graphs.append(json.loads(line))
-    return graphs
-
 
 def get_rel_pattern(g: Dict[str, GraphType]) -> str:
     res_path = g["resolution_path"]
@@ -129,26 +117,6 @@ def get_rel_pattern(g: Dict[str, GraphType]) -> str:
         e = (res_path[i], res_path[i + 1])
         pattern.append(dt[e])
     return ",".join(pattern)
-
-
-def get_path_dict(
-    data_name: str = "", data_loc: str = ""
-) -> Tuple[Dict[str, Any], str]:
-    """get all paths
-    Return: dictionary containing {mode:{rule_worlds}}
-    """
-    # set_trace()
-    loc = os.path.join(data_loc, data_name)
-    all_paths = {}
-    modes = ["train", "valid", "test"]
-    for mode in modes:
-        data_path = os.path.join(loc, mode)
-        all_paths[mode] = [
-            folder
-            for folder in os.listdir(data_path)
-            if os.path.isdir(os.path.join(data_path, folder))
-        ]
-    return all_paths, loc
 
 
 # loading helper functions
@@ -163,35 +131,6 @@ def get_paths(mode: str, rule_folder: str, loc: str) -> ADict:
     paths.meta_graph_path = path.join(loc, mode, rule_folder, "meta_graph.jsonl")
     paths.graph_prop_path = path.join(loc, mode, rule_folder, "graph_prop.json")
     return paths
-
-
-def load_world(paths: Dict[str, Any]) -> ADict:
-    # set_trace()
-    world = ADict()
-    world.paths = paths
-    world.config = json.load(open(paths.config_path))  # type: ignore
-    world.train = load_graphs(paths.train_path)  # type: ignore
-    world.test = load_graphs(paths.test_path)  # type: ignore
-    world.valid = load_graphs(paths.valid_path)  # type: ignore
-    world.meta_graph = load_graphs(paths.meta_graph_path)  # type: ignore
-    # world.graph_prop = json.load(graph_prop_path)
-    return world
-
-
-def get_all_worlds(
-    data_name: str = "", data_loc: str = "", all_paths: Any = None
-) -> Dict[str, WorldType]:
-    """load and return the json of all worlds
-    """
-    # set_trace()
-    if not all_paths:
-        all_paths, loc = get_path_dict(data_name, data_loc)
-    worlds: Dict[str, WorldType] = {}
-    for mode, rule_worlds in all_paths.items():
-        worlds[mode] = {}
-        for rule_world in rule_worlds:
-            worlds[mode][rule_world] = load_world(get_paths(mode, rule_world, loc))
-    return worlds
 
 
 # more helper functions
@@ -239,8 +178,9 @@ def get_num_nodes_edges(world: WorldType) -> Any:
     return round(np.mean(num_nodes), 3), round(np.mean(num_edges), 3)
 
 
-def load_networkx_graphs(graphs: List[Dict[str, Any]]) -> Tuple[List[Any], List[Any]]:
-    # set_trace()
+def load_networkx_graphs(
+    graphs: List[Dict[str, Any]]
+) -> Tuple[List[nx.DiGraph], List[Tuple[int, int]]]:
     nx_graphs = []
     query_nodes = []
     for graph in graphs:
@@ -259,8 +199,8 @@ def load_networkx_graphs(graphs: List[Dict[str, Any]]) -> Tuple[List[Any], List[
                 nodes[edge[1]],
                 data={"relation": edge[2], "in_resolution": in_resolution},
             )
-        g.node[nodes[graph["query"][0]]]["is_query"] = True
-        g.node[nodes[graph["query"][1]]]["is_query"] = True
+        g.nodes[nodes[graph["query"][0]]]["is_query"] = True
+        g.nodes[nodes[graph["query"][1]]]["is_query"] = True
         nx_graphs.append(g)
         query_nodes.append((nodes[graph["query"][0]], nodes[graph["query"][1]]))
     return nx_graphs, query_nodes

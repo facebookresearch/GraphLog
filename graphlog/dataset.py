@@ -1,16 +1,16 @@
 import copy
 import json
 import os
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 import numpy as np
 import torch
 from torch import Tensor
 from torch.utils.data import DataLoader, Dataset
-
-from graphlog.types import DataLoaderType, GraphType
 from torch_geometric.data import Batch as GeometricBatch
 from torch_geometric.data import Data as GeometricData
+
+from graphlog.types import DataLoaderType, GraphType
 
 UNK_LABEL = "UNK_REL"
 
@@ -346,7 +346,7 @@ def pyg_collate(data: List[GraphRow]) -> GraphBatch:
 
 
 def get_dataloader(
-    dataset: GraphLogDataset, batch_size: int, mode: str = "train"
+    dataset: GraphLogDataset, mode: str = "train", **kwargs: Any
 ) -> DataLoaderType:
     """Return dataloader for the specific mode (train/test/valid)
     :param modes:
@@ -360,4 +360,4 @@ def get_dataloader(
         [type] -- [description]
     """
     dataset.set_data_mode(mode)
-    return DataLoader(dataset, batch_size=batch_size, collate_fn=pyg_collate,)
+    return DataLoader(dataset, collate_fn=pyg_collate, **kwargs)
