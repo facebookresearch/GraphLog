@@ -9,7 +9,7 @@ def install_base_packages(session):
         "-f",
         "https://download.pytorch.org/whl/torch_stable.html",
         "-r",
-        "requirements/base.txt",
+        "requirements/cpu.txt",
     )
 
 
