@@ -199,8 +199,8 @@ def load_networkx_graphs(
                 nodes[edge[1]],
                 data={"relation": edge[2], "in_resolution": in_resolution},
             )
-        g.node[nodes[graph["query"][0]]]["is_query"] = True
-        g.node[nodes[graph["query"][1]]]["is_query"] = True
+        g.nodes[nodes[graph["query"][0]]]["is_query"] = True
+        g.nodes[nodes[graph["query"][1]]]["is_query"] = True
         nx_graphs.append(g)
         query_nodes.append((nodes[graph["query"][0]], nodes[graph["query"][1]]))
     return nx_graphs, query_nodes
