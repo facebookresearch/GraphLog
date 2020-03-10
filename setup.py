@@ -33,4 +33,5 @@ setuptools.setup(
     # Install development dependencies with
     # pip install -e .[dev]
     extras_require={"dev": dev_requirements + base_requirements},
+    dependency_links=["https://pytorch-geometric.com/whl/torch-1.4.0.html"],
 )
