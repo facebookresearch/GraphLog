@@ -1,3 +1,6 @@
+[![CircleCI](https://circleci.com/gh/fairinternal/GraphLog.svg?style=svg&circle-token=3de77dcba6da65107d3946878697d810251e00d9)](https://circleci.com/gh/fairinternal/GraphLog)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/graphlog)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 # GraphLog
 API to interface with the GraphLog Dataset
