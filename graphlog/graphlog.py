@@ -237,18 +237,18 @@ class GraphLog:
         assert isinstance(stat, dict)
         return stat
 
-    def load_config(self, name: str) -> Any:
+    def load_config(self, name: str) -> Dict[str, List[Any]]:
         """Load the config of a dataset
         Arguments:
             name {str} -- [description]
         Returns:
-            Dict -- [description]
+            Dict[str, List[Any]] -- [description]
         """
         data_mode = self.get_dataset_split(name)
         config_file_path = os.path.join(
             self.data_dir, self.data_filename, data_mode, name, "config.json"
         )
-        config = json.load(open(config_file_path))
+        config:Dict[str,List[Any]] = json.load(open(config_file_path))
         return config
 
     def load_rules(self, name: str) -> List[Any]:
@@ -258,7 +258,7 @@ class GraphLog:
         Returns:
             Dict -- [description]
         """
-        config: List[Any] = self.load_config(name)
+        config: Dict[str, List[Any]] = self.load_config(name)
         return config["rules"]
 
     def compute_similarity(self, name_1: str, name_2: str) -> float:
