@@ -4,11 +4,9 @@ API to interface with the GraphLog Dataset
 
 ### Installation
 
-* `git clone git@github.com:fairinternal/GraphLog`
-* `cd GraphLog`
-* `pip install .`
-
-Alternatively, `pip install git+ssh://git@github.com/fairinternal/GraphLog.git@master#egg=graphlog`
+* Supported OS: Linux
+* Supported Python Version: 3.6+
+* `pip install graphlog==1.0.0rc2 -f https://download.pytorch.org/whl/torch_stable.html -f https://pytorch-geometric.com/whl/torch-1.4.0.html`
 
 ### Documentation
 
@@ -16,14 +14,9 @@ Alternatively, `pip install git+ssh://git@github.com/fairinternal/GraphLog.git@m
 ### Use
 
 
-
-
-
-
-
 ### Dev Setup
 
-* `pip install -e ".[dev]"`
+* `pip install -e ".[dev] -f https://download.pytorch.org/whl/torch_stable.html -f https://pytorch-geometric.com/whl/torch-1.4.0.html"`
 * Install pre-commit hooks `pre-commit install`
 * The code is linted using:
     * `black`
