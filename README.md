@@ -6,9 +6,9 @@ API to interface with the GraphLog Dataset
 
 * `git clone git@github.com:fairinternal/GraphLog`
 * `cd GraphLog`
-* `pip install .`
+* `pip install . -f https://pytorch-geometric.com/whl/torch-1.4.0.html`
 
-Alternatively, `pip install git+ssh://git@github.com/fairinternal/GraphLog.git@master#egg=graphlog`
+Alternatively, `pip install git+ssh://git@github.com/fairinternal/GraphLog.git@master#egg=graphlog -f https://pytorch-geometric.com/whl/torch-1.4.0.html`
 
 ### Documentation
 
