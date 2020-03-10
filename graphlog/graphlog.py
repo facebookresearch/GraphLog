@@ -248,7 +248,7 @@ class GraphLog:
         config_file_path = os.path.join(
             self.data_dir, self.data_filename, data_mode, name, "config.json"
         )
-        config:Dict[str,List[Any]] = json.load(open(config_file_path))
+        config: Dict[str, List[Any]] = json.load(open(config_file_path))
         return config
 
     def load_rules(self, name: str) -> List[Any]:
