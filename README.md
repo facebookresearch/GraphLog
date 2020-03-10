@@ -4,7 +4,9 @@ API to interface with the GraphLog Dataset
 
 ### Installation
 
-`pip install graphlog==1.0.0rc2 -f https://download.pytorch.org/whl/torch_stable.html -f https://pytorch-geometric.com/whl/torch-1.4.0.html`
+* Supported OS: Linux
+* Supported Python Version: 3.6+
+* `pip install graphlog==1.0.0rc2 -f https://download.pytorch.org/whl/torch_stable.html -f https://pytorch-geometric.com/whl/torch-1.4.0.html`
 
 ### Documentation
 
