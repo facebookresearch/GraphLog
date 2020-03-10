@@ -105,3 +105,27 @@ def test_load_networkx_graphs() -> None:
     assert len(query_nodes) == 5000
     for nodes in query_nodes:
         assert len(nodes) == 2
+
+
+def test_compute_similarity() -> None:
+    gl = GraphLog()
+    assert gl.compute_similarity("rule_0", "rule_0") == 1.0
+    assert gl.compute_similarity("rule_0", "rule_2") == 0.9
+    assert gl.compute_similarity("rule_0", "rule_10") == 0.5
+    assert gl.compute_similarity("rule_0", "rule_20") == 0.0
+    assert gl.compute_similarity("rule_0", "rule_50") == 0.0
+
+
+def test_get_most_similar_datasets() -> None:
+    gl = GraphLog()
+    sim = gl.get_most_similar_datasets("rule_0", 5)
+    true_sim = [
+        ("rule_0", 1.0),
+        ("rule_1", 0.95),
+        ("rule_2", 0.9),
+        ("rule_3", 0.85),
+        ("rule_4", 0.8),
+    ]
+    for si, s in enumerate(sim):
+        assert s[0] == true_sim[si][0]
+        assert s[1] == true_sim[si][1]

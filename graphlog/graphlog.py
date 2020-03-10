@@ -1,6 +1,6 @@
 import json
 import os
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
 from addict import Dict as ADict
 from tqdm.auto import tqdm
@@ -14,6 +14,7 @@ from graphlog.utils import (
     get_class,
     get_descriptors,
     get_num_nodes_edges,
+    get_rule_key,
 )
 
 
@@ -235,3 +236,53 @@ class GraphLog:
         )
         assert isinstance(stat, dict)
         return stat
+
+    def load_config(self, name: str) -> Any:
+        """Load the config of a dataset
+        Arguments:
+            name {str} -- [description]
+        Returns:
+            Dict -- [description]
+        """
+        data_mode = self.get_dataset_split(name)
+        config_file_path = os.path.join(
+            self.data_dir, self.data_filename, data_mode, name, "config.json"
+        )
+        config = json.load(open(config_file_path))
+        return config
+
+    def load_rules(self, name: str) -> List[Any]:
+        """Load the rules of a dataset
+        Arguments:
+            name {str} -- [description]
+        Returns:
+            Dict -- [description]
+        """
+        config: List[Any] = self.load_config(name)
+        return config["rules"]
+
+    def compute_similarity(self, name_1: str, name_2: str) -> float:
+        """Compute Similarity between the rules of two datasets
+        """
+        rules_1 = set(get_rule_key(self.load_rules(name_1)))
+        rules_2 = set(get_rule_key(self.load_rules(name_2)))
+        return len(rules_1.intersection(rules_2)) / len(rules_1)
+
+    def get_most_similar_datasets(
+        self, name: str, top_k: int = 10
+    ) -> List[Tuple[str, float]]:
+        """get top_k most similar datasets to name
+        Arguments:
+            name {str} -- [description]
+        Keyword Arguments:
+            top_k {int} -- [description] (default: {10})
+        Returns:
+            List[str] -- [description]
+        """
+        all_data = self.get_dataset_names_by_split()
+        sim_list = []
+        for mode in ["train", "valid", "test"]:
+            for data_name in all_data[mode]:
+                sim_list.append((data_name, self.compute_similarity(name, data_name)))
+        sim_list = sorted(sim_list, key=lambda x: x[1], reverse=True)
+        return sim_list[:top_k]
