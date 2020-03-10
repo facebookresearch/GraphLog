@@ -204,3 +204,19 @@ def load_networkx_graphs(
         nx_graphs.append(g)
         query_nodes.append((nodes[graph["query"][0]], nodes[graph["query"][1]]))
     return nx_graphs, query_nodes
+
+
+def get_rule_key(rule_obj: List[Any]) -> List[str]:
+    """linearize the rules
+    Arguments:
+        rule_obj {[type]} -- [description]
+    Returns:
+        [type] -- [description]
+    """
+    key = []
+    for rule in rule_obj:
+        body = rule["body"]
+        head = rule["head"]
+        if type(body) == list:
+            key.append("{},{}->{}".format(body[0], body[1], head))
+    return key
