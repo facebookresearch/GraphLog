@@ -237,18 +237,18 @@ class GraphLog:
         assert isinstance(stat, dict)
         return stat
 
-    def load_config(self, name: str) -> Dict[str, List[Any]]:
+    def load_config(self, name: str) -> Dict[str, Any]:
         """Load the config of a dataset
         Arguments:
             name {str} -- [description]
         Returns:
-            Dict[str, List[Any]] -- [description]
+            Dict[str, Any] -- [description]
         """
         data_mode = self.get_dataset_split(name)
         config_file_path = os.path.join(
             self.data_dir, self.data_filename, data_mode, name, "config.json"
         )
-        config: Dict[str, List[Any]] = json.load(open(config_file_path))
+        config: Dict[str, Any] = json.load(open(config_file_path))
         return config
 
     def load_rules(self, name: str) -> List[Any]:
