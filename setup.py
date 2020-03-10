@@ -3,7 +3,7 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-with open("requirements/cpu.txt") as f:
+with open("requirements/base.txt") as f:
     base_requirements = f.read().splitlines()
 
 with open("requirements/dev.txt") as f:
