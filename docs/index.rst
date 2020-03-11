@@ -6,10 +6,7 @@
 GraphLog documentation
 ====================================
 
-GraphLog is a multi-purpose, multi-relational graph dataset which is built
-using rules grounded in first order logic. GraphLog can be used to benchmark
-existing Graph Neural Network (GNN) family of models on relation prediction
-task.
+GraphLog is a multi-purpose, multi-relational graph dataset built using rules grounded in first-order logic. GraphLog can be used to benchmark existing Graph Neural Network (GNN) family of models on relation prediction task.
 
 .. image:: images/graphlog_rule.png
    :width: 400
@@ -35,6 +32,6 @@ task.
 Paper
 ---------
 
-GraphLog is published in the paper `“Evaluating Logical Generalization in Graph Neural
-Networks” <#archive>`__. If you like using our dataset, consider citing our work.
+GraphLog is introduced in the paper `“Evaluating Logical Generalization in Graph Neural
+Networks” <#archive>`__. If you find our dataset useful, consider citing our work.
 

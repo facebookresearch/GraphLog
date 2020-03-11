@@ -5,9 +5,9 @@ Basic Usage
 GraphLog can be used as a regular Python module to access the datasets
 used in the paper `“Evaluating Logical Generalization in Graph Neural
 Networks” <#archive>`__. Additionally, GraphLog also provides necessary
-`torch.utils.data.Dataset <https://pytorch.org/docs/stable/data.html?highlight=dataset#torch.utils.data.Dataset>`__
+`Dataset <https://pytorch.org/docs/stable/data.html?highlight=dataset#torch.utils.data.Dataset>`__
 and
-`torch.utils.data.DataLoader <https://pytorch.org/docs/stable/data.html?highlight=dataloader#torch.utils.data.DataLoader>`__
+`DataLoader <https://pytorch.org/docs/stable/data.html?highlight=dataloader#torch.utils.data.DataLoader>`__
 packages for easy training and evaluation.
 
 Loading the data
@@ -22,7 +22,7 @@ downloaded data is then unzipped and placed within this directory.
     from graphlog import GraphLog
     gl = GraphLog()
 
-To change the data directory, pass the ``data_dir`` flag.
+To change the data directory, pass the ``data_dir`` argument.
 
 .. code:: ipython3
 

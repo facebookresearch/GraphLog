@@ -2,14 +2,14 @@ Advanced Usage
 ==============
 
 GraphLog provides an array of datasets, thus making it a perfect
-candidate to test multi-task, continual and meta-learning in graphs.
+candidate to test multi-task, continual, and meta-learning in graphs.
 Each dataset is derived by its own set of **rules**.
 
 Similarity
 ----------
 
 Two datasets can have highly overlapping rules to highly non-overlapping
-rules. This provides GraphLog an unique way to define the notion of task
+rules. This provides GraphLog a unique way to define the notion of task
 **similarity**. Two datasets are highly similar if the underlying rules
 are similar.
 
@@ -18,7 +18,7 @@ are similar.
     from graphlog import GraphLog
     gl = GraphLog()
 
-First, lets get the available datasets in GraphLog
+First, let's get the available datasets in GraphLog
 
 .. code:: ipython3
 
@@ -92,7 +92,7 @@ supervised learning methods as a proxy. For more details how we label
 each dataset as per their difficulty, please check out our paper!
 
 We provide additional meta-data to categorize the datasets with respect
-to their difficulty. To access it, simply call the following API. This
+to their difficulty. To access it, call the following API. This
 will load the datasets directly in memory.
 
 .. code:: ipython3
@@ -108,8 +108,8 @@ Using any of the above categorizations, GraphLog also provides an option
 of evaluating models in a continual learning scenario. Here, we provide
 a simple example to evaluate continual learning on a rolling window of
 similar datasets, based on overlapping rules.
-``get_sorted_dataset_ids(mode="train")`` api will return the datasets in
-the order they were originally created in the paper, which follows a
+``get_sorted_dataset_ids(mode="train")`` API will return the datasets in
+the order they were created in the paper, which follows a
 rolling similarity.
 
 .. code:: ipython3
