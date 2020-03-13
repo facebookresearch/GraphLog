@@ -1,0 +1,17 @@
+{
+    "graphlog_v1.0": {
+        "name": "GraphLog v1.0",
+        "description": "GraphLog suite consisting of 57 datasets.",
+        "url": "https://www.cs.mcgill.ca/~ksinha4/data/graphlog_icml_data.zip",
+        "md5hash": "6aeda25d56251328dcdca0b23b4abe0a",
+        "data_filename": "comp_r10_n100_ov",
+        "difficulty": {
+            "easy": [9,12,18,19,20,24,27,31,34,35,36,37,38,39,
+                46,47,48,49,51],
+            "moderate": [4,7,8,10,11,21,22,26,28,32,33,40,41,
+                43,45,50,52,54,55,56],
+            "hard": [0, 1, 2, 3, 5, 6, 13, 14, 15, 16, 17, 23, 
+                25, 29, 30, 42, 44, 53]
+        }
+    }
+}
