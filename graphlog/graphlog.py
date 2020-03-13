@@ -4,6 +4,7 @@ from typing import Any, Dict, List, Tuple
 
 from addict import Dict as ADict
 from tqdm.auto import tqdm
+import urllib.request
 
 from graphlog.dataset import GraphLogDataset as Dataset
 from graphlog.dataset import get_dataloader
@@ -20,65 +21,58 @@ from graphlog.utils import (
 
 class GraphLog:
 
-    url = "https://www.cs.mcgill.ca/~ksinha4/data/graphlog_icml_data.zip"
-    md5hash = "6aeda25d56251328dcdca0b23b4abe0a"
-    data_filename = "comp_r10_n100_ov"
+    # TODO: replace this URL with the public one once released
+    meta_url = "https://raw.githubusercontent.com/fairinternal/GraphLog/meta/repository.json?token=ABHCWBQ7DMUCPBUCJ5IMBQC6OTULS"  # noqa: E501
 
-    supported_difficulty = ["easy", "moderate", "hard"]
-
-    def __init__(self, data_dir: str = "./data/"):
+    def __init__(self, data_dir: str = "./data/", data_key: str = "graphlog_v1.0"):
         self.data_dir = data_dir
+        self.data_key = data_key
+        self.url = ""
+        self.md5hash = ""
+        self.data_filename = ""
+        self.supported_difficulty: List[str] = []
+        self.datasets_grouped_by_difficulty: Dict[str, List[int]] = {}
+        self.populate_metadata(key=self.data_key)
         self.download()
-        self.datasets_grouped_by_difficulty: Dict[str, List[int]] = {
-            "easy": [
-                9,
-                12,
-                18,
-                19,
-                20,
-                24,
-                27,
-                31,
-                34,
-                35,
-                36,
-                37,
-                38,
-                39,
-                46,
-                47,
-                48,
-                49,
-                51,
-            ],
-            "moderate": [
-                4,
-                7,
-                8,
-                10,
-                11,
-                21,
-                22,
-                26,
-                28,
-                32,
-                33,
-                40,
-                41,
-                43,
-                45,
-                50,
-                52,
-                54,
-                55,
-                56,
-            ],
-            "hard": [0, 1, 2, 3, 5, 6, 13, 14, 15, 16, 17, 23, 25, 29, 30, 42, 44, 53],
-        }
         self.datasets_by_split = self.get_dataset_names_by_split()
         # get proper label2id
         self.label2id = self.get_label2id()
         self.datasets: Dict[str, Dataset] = {}
+
+    def populate_metadata(self, key: str = "") -> None:
+        """Populate metatdata from meta_url
+        Keyword Arguments:
+            key {str} -- [description] (default: {""})
+        Raises:
+            AssertionError: [description]
+        """
+        meta_path = os.path.join(self.data_dir, "meta.json")
+        try:
+            with urllib.request.urlopen(self.meta_url) as url:
+                metadata = json.loads(url.read().decode())
+                json.dump(metadata, open(meta_path, "w"))
+        except Exception as e:
+            print(
+                "Exception : {}, Cannot connect remote to retrieve metadata, looking for saved config...".format(
+                    e
+                )
+            )
+            metadata = json.load(open(meta_path))
+        if key in metadata:
+            self.url = metadata[key]["url"]
+            self.md5hash = metadata[key]["md5hash"]
+            self.data_filename = metadata[key]["data_filename"]
+            if "difficulty" in metadata[key]:
+                self.supported_difficulty = list(metadata[key]["difficulty"].keys())
+                self.datasets_grouped_by_difficulty = metadata[key]["difficulty"]
+            else:
+                self.supported_difficulty = []
+        else:
+            raise AssertionError(
+                "key {} not found in config repository. Please refer the docs for available dataset configs".format(
+                    key
+                )
+            )
 
     def _get_datafile_path(self) -> str:
         return os.path.join(self.data_dir, self.data_filename)
@@ -156,7 +150,14 @@ class GraphLog:
             self.datasets[name] = self._load_single_dataset(mode, name)
         return self.datasets[name]
 
+    def _check_difficulty_support(self) -> None:
+        """check if the loaded dataset supports difficulty
+        """
+        if len(self.supported_difficulty) == 0:
+            raise AssertionError("Current dataset does not support difficulty API's")
+
     def _get_dataset_by_difficulty(self, difficulty: str) -> List[Dataset]:
+        self._check_difficulty_support()
         assert difficulty in self.datasets_grouped_by_difficulty.keys()
         return [
             self.get_dataset_by_name("rule_{}".format(id))
