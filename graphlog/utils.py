@@ -177,6 +177,25 @@ def get_num_nodes_edges(world: WorldType) -> Any:
             num_nodes.append(len(set(all_nodes)))
     return round(np.mean(num_nodes), 3), round(np.mean(num_edges), 3)
 
+def load_networkx_single_graph(graph:Dict[str, Any]) -> Tuple[Any, Dict[int, int]]:
+    g = nx.DiGraph()
+    nodes: Dict[int, int] = {}
+    for edge in graph["edges"]:
+        if edge[0] not in nodes:
+            nodes[edge[0]] = len(nodes)
+        if edge[1] not in nodes:
+            nodes[edge[1]] = len(nodes)
+        in_resolution = (edge[0] in graph["resolution_path"]) & (
+            edge[1] in graph["resolution_path"]
+        )
+        g.add_edge(
+            nodes[edge[0]],
+            nodes[edge[1]],
+            data={"relation": edge[2], "in_resolution": in_resolution},
+        )
+    g.nodes[nodes[graph["query"][0]]]["is_query"] = True
+    g.nodes[nodes[graph["query"][1]]]["is_query"] = True
+    return g, nodes
 
 def load_networkx_graphs(
     graphs: List[Dict[str, Any]]
@@ -184,23 +203,7 @@ def load_networkx_graphs(
     nx_graphs = []
     query_nodes = []
     for graph in graphs:
-        g = nx.DiGraph()
-        nodes: Dict[int, int] = {}
-        for edge in graph["edges"]:
-            if edge[0] not in nodes:
-                nodes[edge[0]] = len(nodes)
-            if edge[1] not in nodes:
-                nodes[edge[1]] = len(nodes)
-            in_resolution = (edge[0] in graph["resolution_path"]) & (
-                edge[1] in graph["resolution_path"]
-            )
-            g.add_edge(
-                nodes[edge[0]],
-                nodes[edge[1]],
-                data={"relation": edge[2], "in_resolution": in_resolution},
-            )
-        g.nodes[nodes[graph["query"][0]]]["is_query"] = True
-        g.nodes[nodes[graph["query"][1]]]["is_query"] = True
+        g,nodes = load_networkx_single_graph(graph)
         nx_graphs.append(g)
         query_nodes.append((nodes[graph["query"][0]], nodes[graph["query"][1]]))
     return nx_graphs, query_nodes
