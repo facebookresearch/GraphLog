@@ -49,6 +49,8 @@ To load a single dataset, use the ``get_dataset_by_name`` method:
     rule_3 = gl.get_dataset_by_name('rule_3')
     type(rule_3)
 
+    >> graphlog.dataset.GraphLogDataset
+
 This will load a ``GraphLogDataset`` object, which is in-turn a Pytorch
 ``Dataset`` instance. Each dataset also has its own training, validation
 and test splits.
@@ -64,6 +66,21 @@ You can also view the aggregate statistics of the dataset:
 
     gl.compute_stats_by_dataset("rule_3")
 
+    >> Data Split : train, 
+    Number of Classes : 16, 
+    Number of Descriptors : 189, 
+    Average Resolution Length : 3.632142857142857, 
+    Average number of nodes : 11.137  and edges : 13.273
+
+.. parsed-literal::
+
+    {'num_class': 16,
+     'num_des': 189,
+     'avg_resolution_length': 3.632142857142857,
+     'num_nodes': 11.137,
+     'num_edges': 13.273,
+     'split': 'train'}
+
 You can also convert the dataset into
 `networkx <https://networkx.github.io/>`__ format, in order to perform
 quick calculations or visualization:
@@ -77,6 +94,16 @@ quick calculations or visualization:
 .. code:: ipython3
 
     nx.info(nx_graphs[0])
+
+To view a single graph in the dataset, you can also use the inbuilt
+``display_single_graph`` api.
+
+.. code:: ipython3
+
+    gl.display_single_graph(rule_3, "train",21)
+
+.. image:: ../images/output_16_0.svg
+
 
 Extracting dataloaders
 ~~~~~~~~~~~~~~~~~~~~~~

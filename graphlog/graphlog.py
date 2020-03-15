@@ -5,6 +5,8 @@ from typing import Any, Dict, List, Tuple
 from addict import Dict as ADict
 from tqdm.auto import tqdm
 import urllib.request
+import networkx as nx
+from pathlib import Path
 
 from graphlog.dataset import GraphLogDataset as Dataset
 from graphlog.dataset import get_dataloader
@@ -16,6 +18,7 @@ from graphlog.utils import (
     get_descriptors,
     get_num_nodes_edges,
     get_rule_key,
+    load_networkx_single_graph
 )
 
 
@@ -25,7 +28,9 @@ class GraphLog:
     meta_url = "https://raw.githubusercontent.com/fairinternal/GraphLog/meta/repository.json?token=ABHCWBQ7DMUCPBUCJ5IMBQC6OTULS"  # noqa: E501
 
     def __init__(self, data_dir: str = "./data/", data_key: str = "graphlog_v1.0"):
-        self.data_dir = data_dir
+        self.data_dir = os.path.abspath(data_dir)
+        # make dir if not exists
+        Path(self.data_dir).mkdir(parents=True, exist_ok=True)
         self.data_key = data_key
         self.url = ""
         self.md5hash = ""
@@ -53,7 +58,7 @@ class GraphLog:
                 json.dump(metadata, open(meta_path, "w"))
         except Exception as e:
             print(
-                "Exception : {}, Cannot connect remote to retrieve metadata, looking for saved config...".format(
+                "Exception : {}, (OR cannot connect remote to retrieve metadata), looking for saved config...".format(
                     e
                 )
             )
@@ -287,3 +292,27 @@ class GraphLog:
                 sim_list.append((data_name, self.compute_similarity(name, data_name)))
         sim_list = sorted(sim_list, key=lambda x: x[1], reverse=True)
         return sim_list[:top_k]
+
+    def display_single_graph(self, dataset:Dataset, mode:str="train", graph_id:int=0) -> None:
+        """ Display a single graph
+        """
+        if mode not in ["train","valid","test"]:
+            raise NotImplementedError("mode not available, has to be one of train/valid/test")
+        mode_raw_data = dataset.json_graphs[mode]
+        if graph_id > len(mode_raw_data):
+            raise AssertionError("graph_id greater than number of available graphs ({})".format(len(mode_raw_data)))
+        raw_graph = mode_raw_data[graph_id]
+        G, _ = load_networkx_single_graph(raw_graph)
+        resolution_path = raw_graph['resolution_path']
+        pos = nx.spring_layout(G)
+        def decide_node_color(node):
+            if 'is_query' in G.nodes()[node]:
+                return "red"
+            elif node in resolution_path:
+                return "blue"
+            else:
+                return "black"
+        edge_colors = ["blue" if G[e[0]][e[1]]['data']['in_resolution'] else "black" for e in G.edges()]
+        node_colors = [decide_node_color(n) for n in G.nodes()]
+        _ = nx.draw_networkx_nodes(G, pos=pos, node_color=node_colors)
+        _ = nx.draw_networkx_edges(G, pos=pos, edge_color=edge_colors)
