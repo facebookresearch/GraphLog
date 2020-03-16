@@ -2,7 +2,7 @@
 #
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 #
-version: 2
+version: 2.1
 jobs:
   # Linux
   py36_linux:
@@ -13,7 +13,6 @@ jobs:
       - run:
           name: "Installing Conda"
           command: |
-            set -e
             curl -o Miniconda3-latest-Linux-x86_64.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
             bash ./Miniconda3-latest-Linux-x86_64.sh -b
             ~/miniconda3/bin/conda init bash
@@ -24,14 +23,17 @@ jobs:
             set -e
             export NOX_PYTHON_VERSIONS=3.6
             ~/miniconda3/bin/conda create -n graphlog python=3.6 -q -y
+            ~/miniconda3/bin/conda run -n graphlog pip install nox
       - run:
           name: "Test graphlog"
           no_output_timeout: 60m
           command: |
             set -e
-            ~/miniconda3/bin/conda run -n graphlog pip install nox
-            ~/miniconda3/bin/conda run -n graphlog python3 -m nox
-
+            export NOX_PYTHON_VERSIONS=3.6
+            conda activate graphlog
+            pip install nox
+            nox
+            
   py37_linux:
     docker:
       - image: circleci/python:3.7
@@ -49,7 +51,7 @@ jobs:
           no_output_timeout: 60m
           command: |
             set -e
-            export NOX_PYTHON_VERSIONS=3.6
+            export NOX_PYTHON_VERSIONS=3.7
             ~/miniconda3/bin/conda create -n graphlog python=3.7 -q -y
       - run:
           name: "Test graphlog"
@@ -76,7 +78,7 @@ jobs:
           no_output_timeout: 60m
           command: |
             set -e
-            export NOX_PYTHON_VERSIONS=3.6
+            export NOX_PYTHON_VERSIONS=3.8
             ~/miniconda3/bin/conda create -n graphlog python=3.8 -q -y
       - run:
           name: "Test graphlog"
