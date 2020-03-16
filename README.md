@@ -16,10 +16,6 @@ API to interface with the GraphLog Dataset. GraphLog is a multi-purpose, multi-r
 * Install pytorch-geometric (and other dependencies) from https://github.com/rusty1s/pytorch_geometric#installation. Make sure that cpu/cuda versions for pytorch and pytorch-geometric etc matches.
 * `pip install graphlog`
 
-### Documentation
-
-Read the [latest documentation on GraphLog]() here.
-
 ### QuickStart
 
 Check out the notebooks on [Basic Usage](examples/Basic%20Usage.ipynb) and [Advanced Usage](examples/Advanced%20Usage.ipynb) to quickly start playing with GraphLog.
