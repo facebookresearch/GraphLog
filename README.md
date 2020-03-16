@@ -36,7 +36,7 @@ Please open an Issue!
 
 ### Contributing
 
-Please read our [Contributing Guidelines](CONTRIBUTING.md) open a Pull Request (PR).
+Please open a Pull Request (PR).
 
 ### Citation
 
@@ -53,4 +53,4 @@ If our work is useful for your research, consider citing it using the following 
 
 ### Licence
 
-GraphLog is CC-BY-NC 4.0 (Attr Non-Commercial Inter.) licensed, as found in the [LICENSE](LICENSE) file.
+CC-BY-NC 4.0 (Attr Non-Commercial Inter.)
