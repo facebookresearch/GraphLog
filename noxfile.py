@@ -13,7 +13,7 @@ def install_torch_packages(session):
     )
 
 
-@nox.session(venv_backend="conda")
+@nox.session()
 def lint(session):
     session.install("--upgrade", "setuptools", "pip")
     install_torch_packages(session)
@@ -24,7 +24,7 @@ def lint(session):
     session.run("mypy", "--strict", "graphlog")
 
 
-@nox.session(venv_backend="conda")
+@nox.session()
 def test(session) -> None:
     session.install("--upgrade", "setuptools", "pip")
     install_torch_packages(session)

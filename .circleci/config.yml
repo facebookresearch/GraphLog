@@ -2,7 +2,7 @@
 #
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 #
-version: 2
+version: 2.1
 jobs:
   # Linux
   py36_linux:
@@ -11,23 +11,16 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Installing Conda"
+          name: "Preparing environment"
           command: |
-            curl -o Miniconda3-latest-Linux-x86_64.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-            bash ./Miniconda3-latest-Linux-x86_64.sh -b
-            ~/miniconda3/bin/conda init bash
+            sudo apt-get install -y expect
+            sudo pip install nox
       - run:
-          name: "Install Python"
-          no_output_timeout: 60m
+          name: "Testing graphlog"
           command: |
-            export NOX_PYTHON_VERSIONS=3.6
-            ~/miniconda3/bin/conda create -n graphlog python=3.6 -q -y
-      - run:
-          name: "Test graphlog"
-          no_output_timeout: 60m
-          command: |
-            ~/miniconda3/bin/conda run -n graphlog pip install nox
-            ~/miniconda3/bin/conda run -n graphlog python3 -m nox
+              export NOX_PYTHON_VERSIONS=3.6
+              pip install nox
+              python3 -m nox
 
   py37_linux:
     docker:
@@ -35,23 +28,16 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Installing Conda"
+          name: "Preparing environment"
           command: |
-            curl -o Miniconda3-latest-Linux-x86_64.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-            bash ./Miniconda3-latest-Linux-x86_64.sh -b
-            ~/miniconda3/bin/conda init bash
+            sudo apt-get install -y expect
+            sudo pip install nox
       - run:
-          name: "Install Python"
-          no_output_timeout: 60m
+          name: "Testing graphlog"
           command: |
-            export NOX_PYTHON_VERSIONS=3.6
-            ~/miniconda3/bin/conda create -n graphlog python=3.7 -q -y
-      - run:
-          name: "Test graphlog"
-          no_output_timeout: 60m
-          command: |
-            ~/miniconda3/bin/conda run -n graphlog pip install nox
-            ~/miniconda3/bin/conda run -n graphlog python3 -m nox
+              export NOX_PYTHON_VERSIONS=3.7
+              pip install nox
+              python3 -m nox
 
   py38_linux:
     docker:
@@ -59,26 +45,19 @@ jobs:
     steps:
       - checkout
       - run:
-          name: "Installing Conda"
+          name: "Preparing environment"
           command: |
-            curl -o Miniconda3-latest-Linux-x86_64.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-            bash ./Miniconda3-latest-Linux-x86_64.sh -b
-            ~/miniconda3/bin/conda init bash
+            sudo apt-get install -y expect
+            sudo pip install nox
       - run:
-          name: "Install Python"
-          no_output_timeout: 60m
+          name: "Testing graphlog"
           command: |
-            export NOX_PYTHON_VERSIONS=3.6
-            ~/miniconda3/bin/conda create -n graphlog python=3.8 -q -y
-      - run:
-          name: "Test graphlog"
-          no_output_timeout: 60m
-          command: |
-            ~/miniconda3/bin/conda run -n graphlog pip install nox
-            ~/miniconda3/bin/conda run -n graphlog python3 -m nox
+              export NOX_PYTHON_VERSIONS=3.8
+              pip install nox
+              python3 -m nox
 
 workflows:
-  version: 2
+  version: 2.0
   build:
     jobs:
       - py36_linux
