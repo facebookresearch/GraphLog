@@ -319,5 +319,5 @@ class GraphLog:
             for e in G.edges()
         ]
         node_colors = [decide_node_color(n) for n in G.nodes()]
-        _ = nx.draw_networkx_nodes(G, pos=pos, node_color=node_colors)
-        _ = nx.draw_networkx_edges(G, pos=pos, edge_color=edge_colors)
+        nx.draw_networkx_nodes(G, pos=pos, node_color=node_colors)
+        nx.draw_networkx_edges(G, pos=pos, edge_color=edge_colors)
