@@ -7,7 +7,7 @@ API to interface with the GraphLog Dataset. GraphLog is a multi-purpose, multi-r
 
 * Homepage: https://www.cs.mcgill.ca/~ksinha4/graphlog/
 
-![](docs/images/graphlog_rule.png)
+<img src="docs/images/graphlog_rule.png" width="400">
 
 ### Installation
 
