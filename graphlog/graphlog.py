@@ -18,7 +18,7 @@ from graphlog.utils import (
     get_descriptors,
     get_num_nodes_edges,
     get_rule_key,
-    load_networkx_single_graph,
+    load_single_networkx_graph,
 )
 
 
@@ -302,11 +302,11 @@ class GraphLog:
                 f"graph_id greater than number of available graphs ({len(mode_raw_data)})"
             )
         raw_graph = mode_raw_data[graph_id]
-        G, _ = load_networkx_single_graph(raw_graph)
+        G, _ = load_single_networkx_graph(raw_graph)
         resolution_path = raw_graph["resolution_path"]
         pos = nx.spring_layout(G)
 
-        def decide_node_color(node):
+        def decide_node_color(node: int) -> str:
             if "is_query" in G.nodes()[node]:
                 return "red"
             elif node in resolution_path:

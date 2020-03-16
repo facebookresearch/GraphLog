@@ -88,7 +88,7 @@ def download_url(url: str, download_dir: str, filename: str, md5: str) -> None:
     else:  # download the file
         try:
             print("Downloading " + url + " to " + fpath)
-            urllib.request.urlretrieve(url, fpath, reporthook=gen_bar_updater())  # type: ignore
+            urllib.request.urlretrieve(url, fpath, reporthook=gen_bar_updater())
         except (urllib.error.URLError, IOError) as e:  # type: ignore
             if url[:5] == "https":
                 url = url.replace("https:", "http:")
@@ -96,7 +96,7 @@ def download_url(url: str, download_dir: str, filename: str, md5: str) -> None:
                     "Failed download. Trying https -> http instead."
                     " Downloading " + url + " to " + fpath
                 )
-                urllib.request.urlretrieve(url, fpath, reporthook=gen_bar_updater())  # type: ignore
+                urllib.request.urlretrieve(url, fpath, reporthook=gen_bar_updater())
             else:
                 raise e
         # check integrity of downloaded file
