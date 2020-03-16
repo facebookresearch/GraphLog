@@ -45,7 +45,7 @@ def download_and_extract_archive(
 
     archive_path = os.path.join(download_dir, archive_filename)
     data_path = os.path.join(download_dir)
-    print("Extracting {} to {}".format(archive_path, data_path))
+    print(f"Extracting {archive_path} to {data_path}")
     extract_archive(from_path=archive_path, to_path=data_path)
 
 
@@ -177,7 +177,8 @@ def get_num_nodes_edges(world: WorldType) -> Any:
             num_nodes.append(len(set(all_nodes)))
     return round(np.mean(num_nodes), 3), round(np.mean(num_edges), 3)
 
-def load_networkx_single_graph(graph:Dict[str, Any]) -> Tuple[Any, Dict[int, int]]:
+
+def load_single_networkx_graph(graph: Dict[str, Any]) -> Tuple[Any, Dict[int, int]]:
     g = nx.DiGraph()
     nodes: Dict[int, int] = {}
     for edge in graph["edges"]:
@@ -197,13 +198,14 @@ def load_networkx_single_graph(graph:Dict[str, Any]) -> Tuple[Any, Dict[int, int
     g.nodes[nodes[graph["query"][1]]]["is_query"] = True
     return g, nodes
 
+
 def load_networkx_graphs(
     graphs: List[Dict[str, Any]]
 ) -> Tuple[List[nx.DiGraph], List[Tuple[int, int]]]:
     nx_graphs = []
     query_nodes = []
     for graph in graphs:
-        g,nodes = load_networkx_single_graph(graph)
+        g, nodes = load_single_networkx_graph(graph)
         nx_graphs.append(g)
         query_nodes.append((nodes[graph["query"][0]], nodes[graph["query"][1]]))
     return nx_graphs, query_nodes
@@ -221,5 +223,5 @@ def get_rule_key(rule_obj: List[Any]) -> List[str]:
         body = rule["body"]
         head = rule["head"]
         if type(body) == list:
-            key.append("{},{}->{}".format(body[0], body[1], head))
+            key.append(f"{body[0]},{body[1]}->{head}")
     return key
