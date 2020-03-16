@@ -178,7 +178,7 @@ def get_num_nodes_edges(world: WorldType) -> Any:
     return round(np.mean(num_nodes), 3), round(np.mean(num_edges), 3)
 
 
-def load_networkx_single_graph(graph: Dict[str, Any]) -> Tuple[Any, Dict[int, int]]:
+def load_single_networkx_graph(graph: Dict[str, Any]) -> Tuple[Any, Dict[int, int]]:
     g = nx.DiGraph()
     nodes: Dict[int, int] = {}
     for edge in graph["edges"]:
@@ -205,7 +205,7 @@ def load_networkx_graphs(
     nx_graphs = []
     query_nodes = []
     for graph in graphs:
-        g, nodes = load_networkx_single_graph(graph)
+        g, nodes = load_single_networkx_graph(graph)
         nx_graphs.append(g)
         query_nodes.append((nodes[graph["query"][0]], nodes[graph["query"][1]]))
     return nx_graphs, query_nodes
