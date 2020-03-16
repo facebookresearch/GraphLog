@@ -287,10 +287,10 @@ class GraphLog:
         sim_list = sorted(sim_list, key=lambda x: x[1], reverse=True)
         return sim_list[:top_k]
 
-    def display_single_graph(
+    def draw_single_graph(
         self, dataset: Dataset, mode: str = "train", graph_id: int = 0
     ) -> None:
-        """ Display a single graph
+        """ Draw a single graph
         """
         if mode not in ["train", "valid", "test"]:
             raise NotImplementedError(
