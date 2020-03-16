@@ -151,15 +151,15 @@ class GraphLog:
             self.datasets[name] = self._load_single_dataset(mode, name)
         return self.datasets[name]
 
-    def _check_difficulty_support(self) -> None:
+    def _check_difficulty_support(self) -> bool:
         """check if the loaded dataset supports difficulty
         """
-        if len(self.supported_difficulty) == 0:
-            raise AssertionError("Current dataset does not support difficulty API's")
+        return len(self.supported_difficulty) > 0
 
     def _get_dataset_by_difficulty(self, difficulty: str) -> List[Dataset]:
-        self._check_difficulty_support()
-        assert difficulty in self.datasets_grouped_by_difficulty.keys()
+        if not self._check_difficulty_support():
+            raise AssertionError("Current dataset does not support difficulty API's")
+        assert difficulty in self.datasets_grouped_by_difficulty
         return [
             self.get_dataset_by_name("rule_{id}")
             for id in self.datasets_grouped_by_difficulty[difficulty]
