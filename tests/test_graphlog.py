@@ -31,9 +31,9 @@ def test_label2id() -> None:
 
 def test_paper_data_ids() -> None:
     gl = GraphLog()
-    train_ids = ["rule_{}".format(d) for d in range(0, 51)]
-    valid_ids = ["rule_{}".format(d) for d in range(51, 54)]
-    test_ids = ["rule_{}".format(d) for d in range(54, 57)]
+    train_ids = [f"rule_{d}" for d in range(0, 51)]
+    valid_ids = [f"rule_{d}" for d in range(51, 54)]
+    test_ids = [f"rule_{d}" for d in range(54, 57)]
     data_by_split = gl.get_dataset_names_by_split()
     for world in train_ids:
         assert world in data_by_split["train"]
