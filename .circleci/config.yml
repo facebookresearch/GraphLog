@@ -33,33 +33,23 @@ jobs:
             conda activate graphlog
             pip install nox
             nox
-            
+
   py37_linux:
     docker:
       - image: circleci/python:3.7
     steps:
       - checkout
       - run:
-          name: "Installing Conda"
+          name: "Preparing environment"
           command: |
-            set -e
-            curl -o Miniconda3-latest-Linux-x86_64.sh https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-            bash ./Miniconda3-latest-Linux-x86_64.sh -b
-            ~/miniconda3/bin/conda init bash
+            sudo apt-get install -y expect
+            sudo pip install nox
       - run:
-          name: "Install Python"
-          no_output_timeout: 60m
+          name: "Testing graphlog"
           command: |
-            set -e
-            export NOX_PYTHON_VERSIONS=3.7
-            ~/miniconda3/bin/conda create -n graphlog python=3.7 -q -y
-      - run:
-          name: "Test graphlog"
-          no_output_timeout: 60m
-          command: |
-            set -e
-            ~/miniconda3/bin/conda run -n graphlog pip install nox
-            ~/miniconda3/bin/conda run -n graphlog python3 -m nox
+              export NOX_PYTHON_VERSIONS=3.7
+              pip install nox
+              python3 -m nox
 
   py38_linux:
     docker:
