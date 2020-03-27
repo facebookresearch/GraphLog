@@ -1,0 +1,4 @@
+tqdm==4.43.0
+numpy==1.18.1
+networkx==2.4
+addict==2.2.1
