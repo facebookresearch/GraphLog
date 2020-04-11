@@ -5,7 +5,7 @@
 # GraphLog
 API to interface with the GraphLog Dataset. GraphLog is a multi-purpose, multi-relational graph dataset built using rules grounded in first-order logic.
 
-* Homepage: https://www.cs.mcgill.ca/~ksinha4/graphlog/
+[Homepage](https://www.cs.mcgill.ca/~ksinha4/graphlog/) | [Paper](https://arxiv.org/abs/2003.06560)
 
 <img src="docs/images/graphlog_rule.png" width="400">
 
@@ -47,7 +47,7 @@ If our work is useful for your research, consider citing it using the following 
   Author = {Koustuv Sinha and Shagun Sodhani and Joelle Pineau and William L. Hamilton},
   Title = {Evaluating Logical Generalization in Graph Neural Networks},
   Year = {2020},
-  arxiv = {}
+  arxiv = {https://arxiv.org/abs/2003.06560}
 }
 ```
 
