@@ -317,7 +317,7 @@ class GraphBatch:
             filtered_list.append(e_g)
         self.edge_graphs = GeometricBatch.from_data_list(filtered_list)
         self.world_graphs = GeometricBatch.from_data_list(world_graphs)
-        self.device = 'cpu'
+        self.device = "cpu"
 
     def to(self, device: str) -> Any:
         self.device = device
