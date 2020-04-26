@@ -105,3 +105,8 @@ venv.bak/
 .vscode
 
 .nox/*
+
+# Data
+data/
+# Lightning
+lightning_logs/
