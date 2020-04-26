@@ -317,8 +317,10 @@ class GraphBatch:
             filtered_list.append(e_g)
         self.edge_graphs = GeometricBatch.from_data_list(filtered_list)
         self.world_graphs = GeometricBatch.from_data_list(world_graphs)
+        self.device = "cpu"
 
-    def to(self, device: str) -> None:
+    def to(self, device: str) -> Any:
+        self.device = device
         self.graphs = self.graphs.to(device)
         self.queries = self.queries.to(device)  # type: ignore
         self.targets = self.targets.to(device)
@@ -326,6 +328,7 @@ class GraphBatch:
         self.edge_indicator = [ei.to(device) for ei in self.edge_indicator]
         self.edge_mapping = [ei.to(device) for ei in self.edge_mapping]
         self.world_graphs = self.world_graphs.to(device)
+        return self
 
 
 def pyg_collate(data: List[GraphRow]) -> GraphBatch:
