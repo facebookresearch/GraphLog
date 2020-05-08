@@ -1,4 +1,10 @@
 """
+# Copyright (c) Facebook, Inc. and its affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+#
 Example template for defining a system.
 """
 import os
@@ -8,15 +14,13 @@ from collections import OrderedDict
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
 from torch import optim
 from torch.utils.data import DataLoader
-from torch_geometric.nn import RGCNConv
-
-from pytorch_lightning import _logger as log
-from pytorch_lightning.core import LightningModule
 
 from graphlog import GraphLog
+from pytorch_lightning import _logger as log
+from pytorch_lightning.core import LightningModule
+from torch_geometric.nn import RGCNConv
 
 
 class SupervisedRGCN(LightningModule):

@@ -1,9 +1,15 @@
+"""
+# Copyright (c) Facebook, Inc. and its affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+#
+"""
 # Basic Supervised Learning example
 # Pytorch Lightning basic experiment example
+# Runs a model on a single node across multiple gpus.
 
-"""
-Runs a model on a single node across multiple gpus.
-"""
 import os
 from argparse import ArgumentParser
 
