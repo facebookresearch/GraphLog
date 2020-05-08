@@ -54,3 +54,11 @@ If our work is useful for your research, consider citing it using the following 
 ### License
 
 CC-BY-NC 4.0 (Attr Non-Commercial Inter.)
+
+### Terms of Use
+
+https://opensource.facebook.com/legal/terms
+
+### Privacy Policy
+
+https://opensource.facebook.com/legal/privacy
