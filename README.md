@@ -30,9 +30,15 @@ Check out the notebooks on [Basic Usage](examples/Basic%20Usage.ipynb) and [Adva
     * `mypy`
 * All the tests can be run locally using `nox`
 
+### Experiments
+
+Code for experiments used in our paper are available in `experiments/` folder.
+
 ### Questions
 
-Please open an Issue!
+- If you have questions, open an Issue
+- Or, [join our Slack channel](https://join.slack.com/t/logicalml/shared_invite/zt-e7osm7j7-vfIRgJAbEHxYN5D70njvyw) and post your questions / comments!
+- To contribute, open a Pull Request (PR)
 
 ### Contributing
 

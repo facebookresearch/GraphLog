@@ -1,0 +1,7 @@
+,rep_fn,comp_fn,mode,test_rule,updates,accuracy,minibatch,epoch,acc_std,loss,k,top_mode,rule_world
+0,GAT,E-GAT,test,,0,0.553,0,2000,0.148,2.385,0,test,"rule_6,rule_24,rule_32,rule_27,rule_36,rule_48,rule_10,rule_13,rule_16,rule_35"
+1,Param,E-GAT,test,,0,0.495,0,2000,0.146,2.63,0,test,"rule_6,rule_24,rule_32,rule_27,rule_36,rule_48,rule_10,rule_13,rule_16,rule_35"
+2,GCN,E-GAT,test,,0,0.522,0,2000,0.159,2.277,0,test,"rule_6,rule_24,rule_32,rule_27,rule_36,rule_48,rule_10,rule_13,rule_16,rule_35"
+3,GAT,RGCN,test,,0,0.498,0,2000,0.133,2.94,0,test,"rule_6,rule_24,rule_32,rule_27,rule_36,rule_48,rule_10,rule_13,rule_16,rule_35"
+4,Param,RGCN,test,,0,0.4,0,2000,0.111,2.391,0,test,"rule_6,rule_24,rule_32,rule_27,rule_36,rule_48,rule_10,rule_13,rule_16,rule_35"
+5,GCN,RGCN,test,,0,0.483,0,2000,0.133,3.956,0,test,"rule_6,rule_24,rule_32,rule_27,rule_36,rule_48,rule_10,rule_13,rule_16,rule_35"

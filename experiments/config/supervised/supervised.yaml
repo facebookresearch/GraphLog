@@ -1,0 +1,142 @@
+data:
+  with_answer: false
+general:
+  base_path: ~/checkpoint/lgw/ckpt/
+  batch_size: 256
+  commit_id: ''
+  data_name: comp_r10_n100_ov
+  date: ''
+  description: Supervised learning experiments
+  device: cuda
+  few_shot_per: 5
+  has_signature: true
+  id: supervised/supervised
+  is_meta: false
+  num_experiments: 1
+  overfit: 0
+  seed: 42
+  server: cluster
+  slurm_id: '-1'
+  test_rule: rule_4
+  train_mode: supervised
+  train_rule: rule_51
+logger:
+  dir: logs
+  file:
+    path: ''
+    should_log_compute_stats: false
+    should_log_trajectory: false
+  project_name: lgw_icml
+  remote:
+    api_key: ""
+    entity: gamma
+    frequency: 5
+    project_name: lgw_icml
+    should_use: true
+  should_use: false
+  tensorboard:
+    should_use: false
+  watch_model: false
+model:
+  base_path: codes.model.pyg.edge_gat
+  clamp: 0.1
+  classify_hidden: 200
+  classify_layers: 2
+  composition_fn_path: codes.model.gat.edge_gat.GatedGatEncoder
+  composition_learn_param: true
+  early_stopping_patience: 150
+  evaluate_frequency: -1
+  first_order: false
+  freeze_composition_fn: false
+  freeze_representation_fn: false
+  gat:
+    alpha: 0.1
+    attn_drop: false
+    bias: true
+    concat: false
+    dropout: 0.4
+    emb_type: random
+    feat_drop: false
+    in_dim: 1
+    negative_slope: 0.2
+    num_heads: 2
+    num_hidden: 300
+    num_layers: 6
+    num_out_heads: 300
+    residual: false
+    share_relation_emb: false
+  gcn:
+    bias: true
+    cached: false
+    dropout: 0.0
+    improved: true
+    normalize: true
+    num_layers: 2
+  k_meta_test: 10
+  learn_relation_weights: true
+  load_dir: ~/checkpoint/lgw/ckpt/multitask_param/composition_100_easy_10_long/
+  lr_inner: 0.001
+  modes:
+  - train
+  - val
+  - test
+  node_embedding_dim: 200
+  num_classes: -1
+  num_epochs: 501
+  num_inner_updates: 1
+  num_nodes: 100
+  optim:
+    eps: 1.0e-08
+    inner_weight_decay: 1.0e-07
+    learning_rate: 0.0001
+    name: Adam
+    scheduler_gamma: 0.8
+    scheduler_patience: 10
+    scheduler_type: plateau
+    weight_decay: 0.0001
+  out_dim: 14
+  persist_best_model: false
+  persist_frequency: 100
+  relation_embedding_dim: 200
+  representation_fn_path: codes.model.gat.sig_edge_gat.GatedNodeGatEncoder
+  representation_learn_param: true
+  rgcn:
+    bias: true
+    dropout: 0.0
+    num_layers: 2
+    root_weight: true
+  save_dir: ~/checkpoint/lgw/ckpt/supervised/supervised
+  should_load_model: false
+  should_train: true
+  signature_gat:
+    alpha: 0.1
+    attn_drop: false
+    bias: false
+    concat: false
+    dropout: 0.4
+    emb_type: random
+    feat_drop: false
+    in_dim: 1
+    learn_node_and_rel_emb: true
+    negative_slope: 0.2
+    num_heads: 2
+    num_hidden: 300
+    num_layers: 2
+    num_out_heads: 300
+    residual: false
+    share_relation_emb: false
+  signature_optim:
+    eps: 1.0e-08
+    learning_rate: 0.01
+    name: SGD
+    scheduler_gamma: 0.9
+    scheduler_patience: 10
+    scheduler_type: plateau
+    weight_decay: 0.0
+  tasks_per_metaupdate: 10
+  use_composition_fn: false
+  use_representation_fn: false
+  use_sparse_embedding: false
+  weight_norm: true
+plot:
+  base_path: ''
