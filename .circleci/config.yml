@@ -8,6 +8,7 @@ jobs:
   py36_linux:
     docker:
       - image: circleci/python:3.6
+      - resource_class: medium+
     steps:
       - checkout
       - run:
@@ -25,6 +26,7 @@ jobs:
   py37_linux:
     docker:
       - image: circleci/python:3.7
+      - resource_class: medium+
     steps:
       - checkout
       - run:
@@ -42,6 +44,7 @@ jobs:
   py38_linux:
     docker:
       - image: circleci/python:3.8
+      - resource_class: medium+
     steps:
       - checkout
       - run:
