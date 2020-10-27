@@ -19,9 +19,9 @@ with open("requirements/dev.txt") as f:
 
 setuptools.setup(
     name="graphlog",
-    version="1.0.0",
+    version="1.1.0_rc1",
     author="Koustuv Sinha and Shagun Sodhani",
-    author_email="sshagunsodhani@gmail.com",
+    author_email="koustuvsinha@gmail.com",
     description="API to interface with the GraphLog Dataset",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",

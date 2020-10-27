@@ -32,7 +32,6 @@ from graphlog.utils import (
 
 class GraphLog:
 
-    # TODO: replace this URL with the public one once released
     meta_url = "https://www.cs.mcgill.ca/~ksinha4/data/repository.json"  # noqa: E501
 
     def __init__(self, data_dir: str = "./data/", data_key: str = "graphlog_v1.0"):

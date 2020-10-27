@@ -96,7 +96,7 @@ class GraphLogDataset(Dataset):  # type: ignore
             "test": [],
             "valid": [],
         }
-        self.path_len: Dict[str, List[int]] = {"train": [], "test": [], "valid": []}
+        # self.path_len: Dict[str, List[int]] = {"train": [], "test": [], "valid": []}
         # contains the raw json graphs
 
         self.json_graphs: Dict[str, List[GraphType]] = {
@@ -186,7 +186,7 @@ class GraphLogDataset(Dataset):  # type: ignore
                 target = self.get_label2id(rel)
                 self.labels[mode].append(target)
                 self.label_set.add(target)
-                self.path_len[mode].append(len(gs["rules"]))
+                # self.path_len[mode].append(len(gs["rules"]))
                 x = torch.arange(len(node2id)).unsqueeze(1)
 
                 edge_index = list(zip(*edges))

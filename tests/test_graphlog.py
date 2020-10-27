@@ -14,10 +14,13 @@ from torch.utils.data import Dataset
 
 from graphlog import GraphLog
 from graphlog.utils import load_networkx_graphs
+import pytest
 
 
-def test_download() -> None:
-    gl = GraphLog()
+@pytest.mark.parametrize(  # type: ignore
+    "gl", [GraphLog(), GraphLog(data_key="graphlog_v1.1")],
+)
+def test_download(gl) -> None:
     data_loc = os.path.join(gl.data_dir, gl.data_filename)
     assert os.path.exists(data_loc) & os.path.isdir(data_loc)
     train_data_loc = os.path.join(data_loc, "train")
@@ -28,8 +31,10 @@ def test_download() -> None:
     assert os.path.exists(test_data_loc) & os.path.isdir(test_data_loc)
 
 
-def test_label2id() -> None:
-    gl = GraphLog()
+@pytest.mark.parametrize(  # type: ignore
+    "gl", [GraphLog(), GraphLog(data_key="graphlog_v1.1")],
+)
+def test_label2id(gl) -> None:
     data_loc = os.path.join(gl.data_dir, gl.data_filename)
     label2id_loc = os.path.join(data_loc, "train", "label2id.json")
     assert os.path.exists(label2id_loc) & os.path.isfile(label2id_loc)
@@ -37,8 +42,10 @@ def test_label2id() -> None:
     assert gl.label2id["UNK_REL"] == 0
 
 
-def test_paper_data_ids() -> None:
-    gl = GraphLog()
+@pytest.mark.parametrize(  # type: ignore
+    "gl", [GraphLog(), GraphLog(data_key="graphlog_v1.1")],
+)
+def test_paper_data_ids(gl) -> None:
     train_ids = [f"rule_{d}" for d in range(0, 51)]
     valid_ids = [f"rule_{d}" for d in range(51, 54)]
     test_ids = [f"rule_{d}" for d in range(54, 57)]
@@ -51,29 +58,35 @@ def test_paper_data_ids() -> None:
         assert world in data_by_split["test"]
 
 
-def test_single_dataset() -> None:
-    gl = GraphLog()
+@pytest.mark.parametrize(  # type: ignore
+    "gl", [GraphLog(), GraphLog(data_key="graphlog_v1.1")],
+)
+def test_single_dataset(gl) -> None:
     dataset = gl.get_dataset_by_name("rule_0")
     assert isinstance(dataset, Dataset)
     assert len(gl.datasets) == 1
 
 
-def test_all_dataset_loading() -> None:
-    gl = GraphLog()
+@pytest.mark.parametrize(  # type: ignore
+    "gl", [GraphLog(), GraphLog(data_key="graphlog_v1.1")],
+)
+def test_all_dataset_loading(gl) -> None:
     gl.load_datasets()
     assert len(gl.datasets) == 57
 
 
-def test_single_dataloader() -> None:
-    gl = GraphLog()
+@pytest.mark.parametrize(  # type: ignore
+    "gl", [GraphLog(), GraphLog(data_key="graphlog_v1.1")],
+)
+def test_single_dataloader(gl) -> None:
     device = (
         torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")
     )
     cpu_device = torch.device("cpu")
     dataset = gl.get_dataset_by_name(name="rule_0")
     batch_size = 32
-    dataloader_size = {"train": 157, "valid": 32, "test": 32}
-    for mode, size in dataloader_size.items():
+    modes = ["train", "valid", "test"]
+    for mode in modes:
         dataloader = gl.get_dataloader_by_mode(
             dataset=dataset, batch_size=batch_size, mode=mode
         )
@@ -84,7 +97,9 @@ def test_single_dataloader() -> None:
             batch.to(device)
             assert batch.targets.device == device
             break
-        assert len(dataloader) == size
+
+
+# v1.0 specific tests
 
 
 def test_stats() -> None:

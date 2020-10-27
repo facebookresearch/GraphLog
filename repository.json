@@ -13,5 +13,12 @@
             "hard": [0, 1, 2, 3, 5, 6, 13, 14, 15, 16, 17, 23, 
                 25, 29, 30, 42, 44, 53]
         }
+    },
+    "graphlog_v1.1": {
+        "name": "GraphLog v1.1",
+        "description": "GraphLog suite consisting of 57 datasets. New generation pipeline with explanable resolution paths.",
+        "url": "https://www.cs.mcgill.ca/~ksinha4/data/graphlog_v1.1.zip",
+        "md5hash": "b206d3463b6a31a77f86c1e9ace22dc6",
+        "data_filename": "graphlog_v1.1"
     }
 }
