@@ -1,6 +1,7 @@
 [![CircleCI](https://circleci.com/gh/facebookresearch/GraphLog.svg?style=svg&circle-token=3de77dcba6da65107d3946878697d810251e00d9)](https://circleci.com/gh/facebookresearch/GraphLog)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/graphlog)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![PyPI version](https://badge.fury.io/py/graphlog.svg)](https://badge.fury.io/py/graphlog)
 
 # GraphLog
 API to interface with the GraphLog Dataset. GraphLog is a multi-purpose, multi-relational graph dataset built using rules grounded in first-order logic.
