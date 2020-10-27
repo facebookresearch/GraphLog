@@ -32,7 +32,7 @@ from graphlog.utils import (
 
 class GraphLog:
 
-    meta_url = "https://www.cs.mcgill.ca/~ksinha4/data/repository.json"  # noqa: E501
+    meta_url = "https://raw.githubusercontent.com/facebookresearch/GraphLog/master/repository.json"  # noqa: E501
 
     def __init__(self, data_dir: str = "./data/", data_key: str = "graphlog_v1.0"):
         self.data_dir = os.path.abspath(data_dir)
