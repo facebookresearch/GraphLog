@@ -10,6 +10,10 @@ API to interface with the GraphLog Dataset. GraphLog is a multi-purpose, multi-r
 
 <img src="docs/images/graphlog_rule.png" width="400">
 
+### News
+
+- Core Generator logic of GraphLog is now released in its own repository, [GLC](https://github.com/koustuvsinha/glc)! This repository will contain the specific instantiations of GLC which can be used to create various setups of GraphLog. Stay tuned for more updates!
+
 ### Installation
 
 * Supported Python Version: 3.6, 3.7, 3.8
