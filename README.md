@@ -1,4 +1,3 @@
-[![CircleCI](https://circleci.com/gh/facebookresearch/GraphLog.svg?style=svg&circle-token=3de77dcba6da65107d3946878697d810251e00d9)](https://circleci.com/gh/facebookresearch/GraphLog)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/graphlog)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![PyPI version](https://badge.fury.io/py/graphlog.svg)](https://badge.fury.io/py/graphlog)
@@ -6,7 +5,7 @@
 # GraphLog
 API to interface with the GraphLog Dataset. GraphLog is a multi-purpose, multi-relational graph dataset built using rules grounded in first-order logic.
 
-[Homepage](https://www.cs.mcgill.ca/~ksinha4/graphlog/) | [Paper](https://arxiv.org/abs/2003.06560) | [API Docs](https://graphlog.readthedocs.io/en/latest/)
+[Homepage](https://www.cs.mcgill.ca/~ksinha4/graphlog/) | [Paper](https://arxiv.org/abs/2003.06560) | [API Docs](https://graphlog.readthedocs.io/en/latest/) | [Dataset](https://drive.google.com/file/d/1s6oG_5Ul199puKAu67z3QrOAm943hGV2/view?usp=sharing)
 
 <img src="docs/images/graphlog_rule.png" width="400">
 
@@ -42,8 +41,7 @@ Code for experiments used in our paper are available in `experiments/` folder.
 ### Questions
 
 - If you have questions, open an Issue
-- Or, [join our Slack channel](https://join.slack.com/t/logicalml/shared_invite/zt-e7osm7j7-vfIRgJAbEHxYN5D70njvyw) and post your questions / comments!
-- To contribute, open a Pull Request (PR)
+- If you have any questions or topics related to this project to discuss, please contact `koustuvs[at]meta.com`.
 
 ### Contributing
 
