@@ -15,7 +15,7 @@ torch-sparse
 torch-cluster
 torch-spline-conv
 torch-geometric
-black==19.10b
+black==24.3.0
 flake8==3.7.9
 graphlog
 
